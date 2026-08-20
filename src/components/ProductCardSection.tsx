@@ -14,9 +14,9 @@ const categoryTitles: Record<ProductCategory, string> = {
 };
 
 function getCategoryFromPath(pathname: string | null): ProductCategory {
-  if (pathname?.startsWith("/palworld")) return "palworld";
+  if (pathname?.startsWith("/magic")) return "magic";
   if (pathname?.startsWith("/pokemon")) return "pokemon";
-  return "magic";
+  return "palworld";
 }
 
 export function ProductCardSection() {

@@ -4,18 +4,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const HERO_IMAGE =
+const MAGIC_HERO_IMAGE =
   "https://s3-us-west-1.amazonaws.com/5cc.images/games/userfiles/1786048222554-MTG-Reality-Fracture-Desktop-PO.jpg";
 
-const PALWORLD_HERO_IMAGE =
+const HERO_IMAGE =
   "https://s3-us-west-1.amazonaws.com/5cc.images/games/userfiles/1783364140189-Palworld-TCG-Banner-desktop.jpg";
 
 export function HeroSection() {
   const pathname = usePathname();
-  const isPalworld = pathname?.startsWith("/palworld");
+  const isMagic = pathname?.startsWith("/magic");
 
-  const imageSrc = isPalworld ? PALWORLD_HERO_IMAGE : HERO_IMAGE;
-  const ctaHref = isPalworld
+  const imageSrc = isMagic ? MAGIC_HERO_IMAGE : HERO_IMAGE;
+  const ctaHref = isMagic
     ? "/products/palworld-base-set"
     : "/products/modern-horizons-3";
 
@@ -27,9 +27,9 @@ export function HeroSection() {
         <Image
           src={imageSrc}
           alt={
-            isPalworld
-              ? "Palworld TCG — Preorder Now"
-              : "Magic: The Gathering Reality Fracture — Preorder Now"
+            isMagic
+              ? "Magic: The Gathering Reality Fracture — Preorder Now"
+              : "Palworld TCG — Preorder Now"
           }
           width={1920}
           height={600}
@@ -41,7 +41,7 @@ export function HeroSection() {
           href={ctaHref}
           className="absolute inset-0"
           aria-label={
-            isPalworld ? "Preorder Palworld TCG" : "Preorder Reality Fracture"
+            isMagic ? "Preorder Reality Fracture" : "Preorder Palworld TCG"
           }
         />
       </section>

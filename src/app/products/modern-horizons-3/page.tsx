@@ -4,14 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Modern Horizons 3 | Mythic Market",
-  description: "Pre-order Modern Horizons 3 Play Booster Boxes.",
+  title: "Palworld | Crown & Card",
+  description: "Pre-Order the next Palworld drop",
 };
 
 export default function ModernHorizons3Page() {
   return (
     <div className="bg-surface">
-      <div className="mx-auto max-w-[var(--spacing-container)] px-8 py-12">
+      <div className="mx-auto max-w-container px-8 py-12">
         <Link
           href="/"
           className="inline-flex items-center gap-2 text-sm text-on-surface-variant transition-colors hover:text-on-surface"
@@ -32,7 +32,9 @@ export default function ModernHorizons3Page() {
           </div>
 
           <div>
-            <span className="text-label-mono text-primary-dim">Magic: The Gathering</span>
+            <span className="text-label-mono text-primary-dim">
+              Magic: The Gathering
+            </span>
             <h1 className="mt-2 text-display-lg text-on-surface">
               Modern Horizons 3
             </h1>
@@ -40,7 +42,7 @@ export default function ModernHorizons3Page() {
               Play Booster Box — 30 Packs
             </p>
 
-            <p className="mt-6 font-[family-name:var(--font-display)] text-4xl font-bold text-on-surface">
+            <p className="mt-6 font-display text-4xl font-bold text-on-surface">
               $289.99
             </p>
             <p className="mt-1 text-label-mono text-on-surface-variant">
@@ -53,7 +55,10 @@ export default function ModernHorizons3Page() {
                 "Factory sealed with authenticity verification",
                 "Free tracked shipping on orders over $150",
               ].map((item) => (
-                <li key={item} className="flex items-start gap-3 text-sm text-on-surface-variant">
+                <li
+                  key={item}
+                  className="flex items-start gap-3 text-sm text-on-surface-variant"
+                >
                   <Check className="mt-0.5 size-4 shrink-0 text-primary-dim" />
                   {item}
                 </li>
@@ -63,7 +68,7 @@ export default function ModernHorizons3Page() {
             <div className="mt-8 flex flex-wrap gap-4">
               <button
                 type="button"
-                className="inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-3.5 font-[family-name:var(--font-display)] text-sm font-bold text-on-primary transition-all hover:bg-primary-dim glow-primary"
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-3.5 font-display text-sm font-bold text-on-primary transition-all hover:bg-primary-dim glow-primary"
               >
                 <ShoppingCart className="size-4" />
                 Add to Pre-order
@@ -73,8 +78,12 @@ export default function ModernHorizons3Page() {
             <div className="mt-8 flex items-center gap-3 rounded-lg border border-outline-variant/30 bg-surface-container-low p-4">
               <Truck className="size-5 text-primary-dim" />
               <div>
-                <p className="text-sm font-medium text-on-surface">Estimated Delivery</p>
-                <p className="text-sm text-on-surface-variant">June 14 – June 21, 2024</p>
+                <p className="text-sm font-medium text-on-surface">
+                  Estimated Delivery
+                </p>
+                <p className="text-sm text-on-surface-variant">
+                  June 14 – June 21, 2024
+                </p>
               </div>
             </div>
           </div>

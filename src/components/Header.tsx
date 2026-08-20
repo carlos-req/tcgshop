@@ -5,9 +5,9 @@ import Link from "next/link";
 import { useState } from "react";
 
 const navLinks = [
-  { label: "Magic", href: "/magic", active: true },
+  { label: "Palworld", href: "/palworld", active: true },
+  { label: "Magic", href: "/magic" },
   { label: "Pokemon", href: "/pokemon" },
-  { label: "Palworld", href: "/palworld" },
   { label: "Sets", href: "/sets" },
 ];
 
@@ -16,10 +16,10 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/5 bg-surface-container-lowest/90 backdrop-blur-md">
-      <div className="mx-auto flex max-w-[var(--spacing-container)] items-center gap-6 px-8 py-4">
+      <div className="mx-auto flex max-w-container items-center gap-6 px-8 py-4">
         <Link
           href="/"
-          className="shrink-0 font-[family-name:var(--font-display)] text-sm font-extrabold tracking-[0.15em] text-on-surface"
+          className="shrink-0 font-display text-sm font-extrabold tracking-[0.15em] text-on-surface"
         >
           Crown & Card
         </Link>
@@ -50,7 +50,7 @@ export function Header() {
             placeholder="Search for cards or sets..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-full border border-outline-variant/60 bg-transparent py-2.5 pl-11 pr-4 font-[family-name:var(--font-mono)] text-sm text-on-surface placeholder:text-outline/70 focus:border-primary-dim focus:outline-none focus:ring-1 focus:ring-primary-dim/30"
+            className="w-full rounded-full border border-outline-variant/60 bg-transparent py-2.5 pl-11 pr-4 font-mono text-sm text-on-surface placeholder:text-outline/70 focus:border-primary-dim focus:outline-none focus:ring-1 focus:ring-primary-dim/30"
           />
         </div>
 

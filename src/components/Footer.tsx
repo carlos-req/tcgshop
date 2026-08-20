@@ -15,11 +15,11 @@ const communityLinks = [
 export function Footer() {
   return (
     <footer className="border-t border-white/5 bg-surface-container-lowest">
-      <div className="mx-auto max-w-[var(--spacing-container)] px-8 py-12">
+      <div className="mx-auto max-w-container px-8 py-12">
         <div className="grid gap-10 md:grid-cols-3">
           <div>
-            <p className="font-[family-name:var(--font-display)] text-sm font-extrabold tracking-[0.15em] text-on-surface">
-              MYTHIC MARKET
+            <p className="font-display text-sm font-extrabold tracking-[0.15em] text-on-surface">
+              CROWN & CARD
             </p>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-on-surface-variant">
               The premier destination for high-end TCG collectors. Authentic
