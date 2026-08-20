@@ -19,7 +19,7 @@ export function Footer() {
         <div className="grid gap-10 md:grid-cols-3">
           <div>
             <p className="font-display text-sm font-extrabold tracking-[0.15em] text-on-surface">
-              CROWN & CARD
+              X-SPELLED
             </p>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-on-surface-variant">
               The premier destination for high-end TCG collectors. Authentic
@@ -63,7 +63,7 @@ export function Footer() {
 
         <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-white/5 pt-6">
           <p className="text-label-mono text-outline">
-            © 2024 MYTHIC MARKET TCG. ALL RIGHTS RESERVED.
+            © 2026 X-SPELLED. ALL RIGHTS RESERVED.
           </p>
           <div className="flex items-center gap-3 text-outline">
             <ShieldCheck className="size-5" aria-label="Verified secure" />

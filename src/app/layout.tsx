@@ -23,7 +23,7 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Crown & Card | Premium TCG Pre-orders & Booster Boxes",
+  title: "X-Spelled | Premium TCG Pre-orders & Booster Boxes",
   description:
     "The premier destination for high-end TCG collectors. Pre-order Magic, Pokemon, and Palworld booster boxes with verified authenticity and secure shipping.",
 };

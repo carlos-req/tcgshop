@@ -8,6 +8,7 @@ export interface Product {
   price: number;
   originalPrice?: number;
   image: string;
+  alt: string;
   status: StockStatus;
   category: ProductCategory;
   slug: string;

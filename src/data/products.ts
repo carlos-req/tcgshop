@@ -6,6 +6,7 @@ export const products: Product[] = [
     name: "Bushiroad Trial Deck Palworld: Dawn of Palpagos - Green · Purple",
     price: 79.97,
     image: "/src/assets/PW-trialdeck-greenpurple.jpg",
+    alt: "Palworld Trial Deck Green - Purple",
     status: "in_stock",
     category: "palworld",
     slug: "dawn-of-palpagos-booster-box",
@@ -15,6 +16,7 @@ export const products: Product[] = [
     name: "Bushiroad Trial Deck Palworld: Dawn of Palpagos - Red & Blue",
     price: 79.97,
     image: "/src/assets/PW-trialdecks-redblue.jpg",
+    alt: "Palworld Trial Deck Red - Blue",
     status: "coming_soon",
     category: "palworld",
     slug: "legends-awaken-booster-box",
@@ -24,6 +26,7 @@ export const products: Product[] = [
     name: "Palworld TCG: Dawn of Palpagos Series 01 Booster Box - 12 Packs",
     price: 150.9,
     image: "src/assets/PW-boosterpack-12-series01.jpg",
+    alt: "Palworld Series 01 Booster Box",
     status: "out_of_stock",
     category: "palworld",
     slug: "sleeve-card-set-vol1",
@@ -33,6 +36,7 @@ export const products: Product[] = [
     name: "Magic: The Gathering — Hobbit Play Booster Box",
     price: 289.99,
     image: "src/assets/mtg-playbooster-hobbit.jpg",
+    alt: "MTG Hobbit Play Booster Box",
     status: "coming_soon",
     category: "magic",
     slug: "hobbit-play-booster-12",
@@ -43,6 +47,7 @@ export const products: Product[] = [
     price: 5.49,
     image:
       "https://s3-us-west-1.amazonaws.com/5cc.images/games/userfiles/1786048222554-MTG-Reality-Fracture-Desktop-PO.jpg",
+    alt: "MTG Modern Horizons 3 Play Booster Box",
     status: "in_stock",
     category: "magic",
     slug: "modern-horizons-3-pack",
@@ -54,29 +59,10 @@ export const products: Product[] = [
     originalPrice: 399.99,
     image:
       "https://s3-us-west-1.amazonaws.com/5cc.images/games/userfiles/1786048222554-MTG-Reality-Fracture-Desktop-PO.jpg",
+    alt: "MTG Commander Masters Play Booster Box",
     status: "in_stock",
     category: "magic",
     slug: "commander-masters-box",
-  },
-  {
-    id: "mtg-4",
-    name: "Magic: The Gathering — Bloomburrow Collector Booster Box",
-    price: 259.99,
-    image:
-      "https://s3-us-west-1.amazonaws.com/5cc.images/games/userfiles/1786048222554-MTG-Reality-Fracture-Desktop-PO.jpg",
-    status: "out_of_stock",
-    category: "magic",
-    slug: "bloomburrow-collector-box",
-  },
-  {
-    id: "mtg-5",
-    name: "Magic: The Gathering — Duskmourn Bundle",
-    price: 44.99,
-    image:
-      "https://s3-us-west-1.amazonaws.com/5cc.images/games/userfiles/1786048222554-MTG-Reality-Fracture-Desktop-PO.jpg",
-    status: "in_stock",
-    category: "magic",
-    slug: "duskmourn-bundle",
   },
 ];
 

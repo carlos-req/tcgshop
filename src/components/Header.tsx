@@ -21,7 +21,7 @@ export function Header() {
           href="/"
           className="shrink-0 font-display text-sm font-extrabold tracking-[0.15em] text-on-surface"
         >
-          Crown & Card
+          X-SPELLED
         </Link>
 
         <nav className="hidden items-center gap-6 lg:flex">
