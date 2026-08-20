@@ -21,7 +21,7 @@ export function Header() {
           href="/"
           className="shrink-0 font-[family-name:var(--font-display)] text-sm font-extrabold tracking-[0.15em] text-on-surface"
         >
-          MYTHIC MARKET
+          Crown & Card
         </Link>
 
         <nav className="hidden items-center gap-6 lg:flex">
