@@ -2,9 +2,9 @@
 
 import { Bell, Search, User } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
-const navLinks = [
+const navLinks: Array<{ label: string; href: string; active?: boolean }> = [
   { label: "Palworld", href: "/palworld", active: true },
   { label: "Magic", href: "/magic" },
   { label: "Pokemon", href: "/pokemon" },
@@ -13,6 +13,12 @@ const navLinks = [
 
 export function Header() {
   const [searchQuery, setSearchQuery] = useState("");
+  const handleSearchChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchQuery(event.target.value);
+    },
+    [],
+  );
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/5 bg-surface-container-lowest/90 backdrop-blur-md">
@@ -49,7 +55,7 @@ export function Header() {
             type="search"
             placeholder="Search for cards or sets..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleSearchChange}
             className="w-full rounded-full border border-outline-variant/60 bg-transparent py-2.5 pl-11 pr-4 font-mono text-sm text-on-surface placeholder:text-outline/70 focus:border-primary-dim focus:outline-none focus:ring-1 focus:ring-primary-dim/30"
           />
         </div>
