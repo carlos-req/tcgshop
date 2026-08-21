@@ -1,6 +1,6 @@
 ---
 name: anti-ui-slop
-description: 'Stop Codex, GitHub Copilot, Claude Code, and Cursor from shipping generic UI. Use UIZZE’s public catalogue of 800,000+ real web and iOS screens to extract product-specific design decisions and enforce a hard finish gate for web and iOS interfaces.'
+description: "Stop Codex, GitHub Copilot, Claude Code, and Cursor from shipping generic UI. Use UIZZE’s public catalogue of 800,000+ real web and iOS screens to extract product-specific design decisions and enforce a hard finish gate for web and iOS interfaces."
 ---
 
 # Anti UI Slop
@@ -43,18 +43,18 @@ If catalogue browsing is unavailable, ask the user for two or three UIZZE links 
 
 Before changing code, write a short contract with these fields:
 
-| Field | Decision |
-| --- | --- |
-| Screen job | The one outcome this screen enables |
-| Primary user and action | Who acts, and what they do |
-| Content hierarchy | What must be understood first, second, and third |
-| Navigation and controls | Product-specific structure and interaction model |
-| Visual language | Type, spacing, density, surfaces, imagery, and motion rules |
-| Required states | Loading, empty, error, partial, success, disabled, permission |
-| Responsive behavior | What changes across supported widths and input modes |
-| Evidence used | Reference links and transferable decisions |
-| Forbidden defaults | Generic patterns that would erase product specificity |
-| Acceptance criteria | Observable conditions required before shipping |
+| Field                   | Decision                                                      |
+| ----------------------- | ------------------------------------------------------------- |
+| Screen job              | The one outcome this screen enables                           |
+| Primary user and action | Who acts, and what they do                                    |
+| Content hierarchy       | What must be understood first, second, and third              |
+| Navigation and controls | Product-specific structure and interaction model              |
+| Visual language         | Type, spacing, density, surfaces, imagery, and motion rules   |
+| Required states         | Loading, empty, error, partial, success, disabled, permission |
+| Responsive behavior     | What changes across supported widths and input modes          |
+| Evidence used           | Reference links and transferable decisions                    |
+| Forbidden defaults      | Generic patterns that would erase product specificity         |
+| Acceptance criteria     | Observable conditions required before shipping                |
 
 The contract must name concrete choices. “Clean,” “modern,” “intuitive,” and “premium” are not design decisions.
 
