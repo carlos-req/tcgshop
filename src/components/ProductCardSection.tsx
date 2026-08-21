@@ -1,17 +1,24 @@
 "use client";
 
-import { ChevronDown, Search } from "lucide-react";
-import { useMemo, useState } from "react";
+import { Search } from "lucide-react";
+import { useDeferredValue, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import { getProductsByCategory } from "@/data/products";
 import type { ProductCategory } from "@/types/product";
 import { ProductCard } from "@/components/ProductCard";
+import { FilterSelect } from "@/components/FilterSelect";
 
 const categoryTitles: Record<ProductCategory, string> = {
   palworld: "Palworld",
   magic: "Magic: The Gathering",
   pokemon: "Pokemon",
 };
+
+const sortOptions: { value: string; label: string }[] = [
+  { value: "sales", label: "Sort: Sales" },
+  { value: "price-asc", label: "Price: Low to High" },
+  { value: "price-desc", label: "Price: High to Low" },
+];
 
 function getCategoryFromPath(pathname: string | null): ProductCategory {
   if (pathname?.startsWith("/magic")) return "magic";
@@ -23,7 +30,8 @@ export function ProductCardSection() {
   const pathname = usePathname();
   const category = getCategoryFromPath(pathname);
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const deferredSearchQuery = useDeferredValue(searchInput);
   const [inStockOnly, setInStockOnly] = useState(false);
   const [sortBy, setSortBy] = useState<"sales" | "price-asc" | "price-desc">(
     "sales",
@@ -32,8 +40,8 @@ export function ProductCardSection() {
   const filteredProducts = useMemo(() => {
     let items = getProductsByCategory(category);
 
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
+    if (deferredSearchQuery.trim()) {
+      const query = deferredSearchQuery.toLowerCase();
       items = items.filter((product) =>
         product.name.toLowerCase().includes(query),
       );
@@ -50,7 +58,7 @@ export function ProductCardSection() {
     }
 
     return items;
-  }, [category, searchQuery, inStockOnly, sortBy]);
+  }, [category, deferredSearchQuery, inStockOnly, sortBy]);
 
   return (
     <section className="bg-surface py-10 lg:py-14">
@@ -66,11 +74,7 @@ export function ProductCardSection() {
             onChange={(value) =>
               setSortBy(value as "sales" | "price-asc" | "price-desc")
             }
-            options={[
-              { value: "sales", label: "Sort: Sales" },
-              { value: "price-asc", label: "Price: Low to High" },
-              { value: "price-desc", label: "Price: High to Low" },
-            ]}
+            options={sortOptions}
           />
 
           <FilterSelect
@@ -107,8 +111,8 @@ export function ProductCardSection() {
             <input
               type="search"
               placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchInput}
+              onChange={(event) => setSearchInput(event.target.value)}
               className="w-full rounded-lg border border-outline-variant/60 bg-surface-container-low py-2 pl-10 pr-4 font-mono text-sm text-on-surface placeholder:text-outline/70 focus:border-primary-dim focus:outline-none focus:ring-1 focus:ring-primary-dim/30"
             />
           </div>
@@ -127,34 +131,5 @@ export function ProductCardSection() {
         )}
       </div>
     </section>
-  );
-}
-
-interface FilterSelectProps {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  options: { value: string; label: string }[];
-}
-
-function FilterSelect({ value, onChange, options }: FilterSelectProps) {
-  return (
-    <div className="relative">
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="appearance-none rounded-lg border border-outline-variant/60 bg-surface-container-low py-2 pl-4 pr-10 text-sm text-on-surface-variant focus:border-primary-dim focus:outline-none focus:ring-1 focus:ring-primary-dim/30"
-      >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-      <ChevronDown
-        className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-outline"
-        aria-hidden
-      />
-    </div>
   );
 }

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Image from "next/image";
 import type { Product, StockStatus } from "@/types/product";
 
@@ -35,7 +36,7 @@ interface ProductCardProps {
   product: Product;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+function ProductCardComponent({ product }: ProductCardProps) {
   const button = getButtonConfig(product.status);
 
   return (
@@ -77,3 +78,5 @@ export function ProductCard({ product }: ProductCardProps) {
     </article>
   );
 }
+
+export const ProductCard = memo(ProductCardComponent);
