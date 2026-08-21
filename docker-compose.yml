@@ -1,0 +1,13 @@
+services:
+  db:
+    image: postgres:18
+    container_name: local-postgres
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql
+
+volumes:
+  pgdata:
