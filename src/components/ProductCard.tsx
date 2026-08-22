@@ -1,36 +1,8 @@
 import { memo } from "react";
 import Image from "next/image";
-import type { Product, StockStatus } from "@/types/product";
-
-function formatPrice(value: number) {
-  return `$${value.toFixed(2)}`;
-}
-
-function getButtonConfig(status: StockStatus) {
-  switch (status) {
-    case "in_stock":
-      return {
-        label: "Add to Cart",
-        className:
-          "bg-primary text-on-primary hover:bg-primary-dim hover:glow-primary",
-        disabled: false,
-      };
-    case "coming_soon":
-      return {
-        label: "Preorder",
-        className:
-          "bg-secondary text-white preorder-pulse hover:bg-secondary/90",
-        disabled: false,
-      };
-    case "out_of_stock":
-      return {
-        label: "Out of Stock",
-        className:
-          "cursor-not-allowed bg-surface-container-highest text-on-surface-variant",
-        disabled: true,
-      };
-  }
-}
+import Link from "next/link";
+import type { Product } from "@/types/product";
+import { formatPrice, getButtonConfig } from "@/lib/product-display";
 
 interface ProductCardProps {
   product: Product;
@@ -39,17 +11,24 @@ interface ProductCardProps {
 function ProductCardComponent({ product }: ProductCardProps) {
   const button = getButtonConfig(product.status);
 
+  const href = `/${product.category}/${product.slug}`;
+
   return (
     <article className="glass-card glass-card-hover flex flex-col overflow-hidden rounded-lg">
-      <div className="relative aspect-square bg-surface-container-low">
-        <Image
-          src={product.image}
-          alt={product.name}
-          fill
-          className="object-cover object-center"
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-        />
-      </div>
+      <Link
+        href={href}
+        className="relative block aspect-square bg-surface-container-low"
+      >
+        {product.image && (
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            className="object-cover object-center"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+          />
+        )}
+      </Link>
 
       <div className="flex flex-1 flex-col p-4">
         <div className="mb-2 flex flex-wrap items-baseline gap-2">
@@ -63,9 +42,11 @@ function ProductCardComponent({ product }: ProductCardProps) {
           )}
         </div>
 
-        <h3 className="line-clamp-3 flex-1 text-sm leading-snug text-on-surface">
-          {product.name}
-        </h3>
+        <Link href={href} className="line-clamp-3 flex-1">
+          <h3 className="text-sm leading-snug text-on-surface hover:text-primary-dim">
+            {product.name}
+          </h3>
+        </Link>
 
         <button
           type="button"

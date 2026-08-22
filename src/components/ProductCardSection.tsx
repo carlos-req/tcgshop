@@ -2,17 +2,9 @@
 
 import { Search } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
-import { usePathname } from "next/navigation";
-import { getProductsByCategory } from "@/data/products";
-import type { ProductCategory } from "@/types/product";
+import type { Product } from "@/types/product";
 import { ProductCard } from "@/components/ProductCard";
 import { FilterSelect } from "@/components/FilterSelect";
-
-const categoryTitles: Record<ProductCategory, string> = {
-  palworld: "Palworld",
-  magic: "Magic: The Gathering",
-  pokemon: "Pokemon",
-};
 
 const sortOptions: { value: string; label: string }[] = [
   { value: "sales", label: "Sort: Sales" },
@@ -20,16 +12,15 @@ const sortOptions: { value: string; label: string }[] = [
   { value: "price-desc", label: "Price: High to Low" },
 ];
 
-function getCategoryFromPath(pathname: string | null): ProductCategory {
-  if (pathname?.startsWith("/magic")) return "magic";
-  if (pathname?.startsWith("/pokemon")) return "pokemon";
-  return "palworld";
+interface ProductCardSectionProps {
+  categoryName: string;
+  products: Product[];
 }
 
-export function ProductCardSection() {
-  const pathname = usePathname();
-  const category = getCategoryFromPath(pathname);
-
+export function ProductCardSection({
+  categoryName,
+  products,
+}: ProductCardSectionProps) {
   const [searchInput, setSearchInput] = useState("");
   const deferredSearchQuery = useDeferredValue(searchInput);
   const [inStockOnly, setInStockOnly] = useState(false);
@@ -38,7 +29,7 @@ export function ProductCardSection() {
   );
 
   const filteredProducts = useMemo(() => {
-    let items = getProductsByCategory(category);
+    let items = products;
 
     if (deferredSearchQuery.trim()) {
       const query = deferredSearchQuery.toLowerCase();
@@ -58,14 +49,12 @@ export function ProductCardSection() {
     }
 
     return items;
-  }, [category, deferredSearchQuery, inStockOnly, sortBy]);
+  }, [products, deferredSearchQuery, inStockOnly, sortBy]);
 
   return (
     <section className="bg-surface py-10 lg:py-14">
       <div className="mx-auto max-w-container px-8">
-        <h2 className="text-headline-md text-on-surface">
-          {categoryTitles[category]}
-        </h2>
+        <h2 className="text-headline-md text-on-surface">{categoryName}</h2>
 
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <FilterSelect

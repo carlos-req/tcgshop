@@ -15,9 +15,7 @@ export function HeroSection() {
   const isMagic = pathname?.startsWith("/magic");
 
   const imageSrc = isMagic ? MAGIC_HERO_IMAGE : HERO_IMAGE;
-  const ctaHref = isMagic
-    ? "/products/palworld-base-set"
-    : "/products/modern-horizons-3";
+  const ctaHref = isMagic ? "/magic" : "/palworld";
 
   return (
     <section className="relative w-full leading-none">
