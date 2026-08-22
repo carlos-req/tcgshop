@@ -1,6 +1,11 @@
 export type StockStatus = "in_stock" | "coming_soon" | "out_of_stock";
 
-export type ProductCategory = "magic" | "palworld" | "pokemon";
+export interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+}
 
 export interface Product {
   id: string;
@@ -10,6 +15,12 @@ export interface Product {
   image: string;
   alt: string;
   status: StockStatus;
-  category: ProductCategory;
+  category: string;
   slug: string;
+}
+
+export interface ProductDetail extends Product {
+  description?: string;
+  sku: string;
+  stock: number;
 }
