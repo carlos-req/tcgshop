@@ -100,3 +100,51 @@ Increments sized for one or two prompts each, in dependency order. Status reflec
 - **5a** (production webhook config): the real webhook path is now proven end-to-end via `stripe listen` for local dev. Before deploying, still need a Stripe Dashboard webhook endpoint pointing at the deployed `/api/stripe/webhook` URL, with that environment's own `STRIPE_WEBHOOK_SECRET`.
 - **2b** (loose end): `src/data/products.ts`/`categories.ts`/the webhook route still use hand-written local interfaces instead of importing the now-generated types from `src/payload-types.ts`. Low urgency, cosmetic/DRY cleanup.
 - Not yet built (beyond plan.md's original 8-step scope, no current need): `pokemon` category doc (type is wired for it, per user's earlier "keep it, build the route now" answer, but no CMS category exists yet); handling for `checkout.session.expired`/async payment failure events.
+
+---
+
+# Phase 2 — see `plan-v2.md`
+
+Decisions locked in: Supabase for Postgres hosting only (not auth); a separate `Customers` collection for shopper accounts (never the same login as admin `Users`); design pass starts now, in parallel with the rest; legal pages get scaffolded with placeholder text, not real copy. None of the items below are started yet.
+
+## 7. Design pass — homepage/category hierarchy
+- Homepage and category pages currently share one generic `HeroSection` + `ProductCardSection` layout with no real distinction between "landing page" and "browse this category." Overall look reads as templated/AI-generated.
+- Use the `frontend-design` skill. In scope: homepage, category page, product detail page, shared header/footer/hero. Out of scope: Payload's admin UI.
+- **Not started.**
+
+## 8. Supabase Postgres migration
+- Provision a Supabase Postgres database, point `DATABASE_URL` at it, verify all collections (including the new `Customers` from #9) come up clean against it.
+- Decide re-seed vs. dump/restore for current dev data (likely re-seed, given today's data is two demo products).
+- **Not started.**
+
+## 9. `Customers` collection (separate from admin `Users`)
+- New Payload collection, `auth: true`, for shopper accounts — never the same collection/login as staff `Users`.
+- Customer-facing login/signup pages under `(frontend)`.
+- **Not started.** Depends on nothing else in this list, but #10/#11 depend on it.
+
+## 10. Multi-item cart
+- The biggest lift in phase 2. There is currently no cart at all — checkout is a single "Buy Now" flow (`/api/checkout` takes one product, quantity hardcoded to `1`).
+- Needs: client-side cart state persisted to `localStorage` (add/remove/adjust quantity), a cart UI (drawer or page), `/api/checkout` extended to accept an array of `{ productId, quantity }` line items, and the webhook's stock-decrement + `Order`-creation logic extended to handle multiple line items per session instead of one.
+- **Not started.**
+
+## 11. Orders linked to customers + order history
+- Add a `customer` relationship field to `Orders` (optional, since guest checkout must keep working).
+- Stamp the logged-in customer's id into Checkout Session metadata at checkout time (same mechanism as `productId`/`categorySlug`/`productSlug` today), so the webhook can link the resulting order.
+- New authenticated route (e.g. `/account/orders`) showing a customer's own order history.
+- **Important pre-existing gap to fix as part of this**: `Orders.access.read` currently allows *any* logged-in user to read *any* order (`Boolean(user)`) — that was fine when only admin staff could log in, but the moment `Customers` (#9) exists, this must be scoped so a customer can only ever read their own orders.
+- **Not started.** Depends on #9.
+
+## 12. Legal pages (scaffolded, not real legal text)
+- Privacy Policy, Terms of Service, Returns/Refund Policy, and a cookie notice if analytics/tracking is ever added.
+- Scaffolded routes with clearly-marked placeholder copy describing what each policy needs to cover — not binding legal text. Real copy needs actual legal review before launch.
+- **Not started.**
+
+## 13. Pre-launch checklist
+- **Order confirmation email**: no email adapter is configured yet (`No email adapter provided` warning on startup) — the checkout success banner already claims "you'll receive a confirmation email shortly," which isn't true today. Needs a real adapter (e.g. Resend, Postmark) in `payload.config.ts`.
+- Clear separation of test vs. live Stripe keys per environment.
+- Production Stripe webhook endpoint registered in the Dashboard (this is #5a above, carried forward).
+- SEO basics: `robots.txt`, sitemap, Open Graph images (per-page metadata already exists via `generateMetadata`).
+- Error/monitoring for `/api/checkout` and the webhook route beyond console logs.
+- Confirm Supabase's backup/PITR settings once #8 is done.
+- Accessibility pass (keyboard nav, focus states, alt-text spot check) — natural to fold into #7's design pass.
+- **Not started.**
