@@ -18,6 +18,32 @@ interface PayloadProductDoc {
   stock?: number | null;
   status: StockStatus;
   images?: (PayloadMediaDoc | string | number)[] | null;
+  stripePriceId?: string | null;
+}
+
+async function findProductDoc(
+  categorySlug: string,
+  productSlug: string,
+): Promise<{ categoryId: string; doc: PayloadProductDoc } | null> {
+  const category = await getCategoryBySlug(categorySlug);
+  if (!category) return null;
+
+  const payload = await getPayloadClient();
+
+  const result = await payload.find({
+    collection: "products",
+    where: {
+      and: [
+        { category: { equals: category.id } },
+        { slug: { equals: productSlug } },
+      ],
+    },
+    depth: 1,
+    limit: 1,
+  });
+
+  const doc = result.docs[0] as PayloadProductDoc | undefined;
+  return doc ? { categoryId: category.id, doc } : null;
 }
 
 function firstImage(doc: PayloadProductDoc) {
@@ -63,10 +89,9 @@ export async function getProductsByCategory(
   );
 }
 
-export async function getProductBySlug(
+export async function getFeaturedProduct(
   categorySlug: string,
-  productSlug: string,
-): Promise<ProductDetail | null> {
+): Promise<Product | null> {
   const category = await getCategoryBySlug(categorySlug);
   if (!category) return null;
 
@@ -77,7 +102,7 @@ export async function getProductBySlug(
     where: {
       and: [
         { category: { equals: category.id } },
-        { slug: { equals: productSlug } },
+        { featured: { equals: true } },
       ],
     },
     depth: 1,
@@ -85,12 +110,53 @@ export async function getProductBySlug(
   });
 
   const doc = result.docs[0] as PayloadProductDoc | undefined;
-  if (!doc) return null;
+  return doc ? mapToProduct(doc, categorySlug) : null;
+}
+
+export async function getProductBySlug(
+  categorySlug: string,
+  productSlug: string,
+): Promise<ProductDetail | null> {
+  const found = await findProductDoc(categorySlug, productSlug);
+  if (!found) return null;
+
+  const { doc } = found;
 
   return {
     ...mapToProduct(doc, categorySlug),
     description: doc.description ?? undefined,
     sku: doc.sku ?? "",
     stock: doc.stock ?? 0,
+  };
+}
+
+export interface CheckoutProduct {
+  id: string;
+  name: string;
+  status: StockStatus;
+  stock: number;
+  stripePriceId: string | null;
+}
+
+/**
+ * Server-only accessor for the Stripe-specific fields (stripePriceId, stock)
+ * needed to create a Checkout Session. Kept separate from getProductBySlug so
+ * the public-facing Product/ProductDetail shape never carries Stripe internals.
+ */
+export async function getProductForCheckout(
+  categorySlug: string,
+  productSlug: string,
+): Promise<CheckoutProduct | null> {
+  const found = await findProductDoc(categorySlug, productSlug);
+  if (!found) return null;
+
+  const { doc } = found;
+
+  return {
+    id: String(doc.id),
+    name: doc.name,
+    status: doc.status,
+    stock: doc.stock ?? 0,
+    stripePriceId: doc.stripePriceId ?? null,
   };
 }
