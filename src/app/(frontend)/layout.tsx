@@ -5,7 +5,6 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CartDrawer } from "@/components/CartDrawer";
 import { CartProvider } from "@/lib/cart-context";
-import { COMPANY_NAME } from "@/lib/site";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -28,7 +27,7 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: `${COMPANY_NAME} | Sealed. Authenticated. Yours to open.`,
+  title: "X-Spelled | Sealed. Authenticated. Yours to open.",
   description:
     "Sealed booster boxes and packs for Magic: The Gathering, Palworld TCG, and more — verified authenticity, tracked shipping, every pack a possibility.",
 };

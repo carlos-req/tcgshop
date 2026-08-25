@@ -5,7 +5,6 @@ import type { Metadata } from "next";
 
 import { getCurrentCustomer } from "@/lib/auth";
 import { getCustomerOrders } from "@/data/orders";
-import { COMPANY_NAME } from "@/lib/site";
 import { logoutAction } from "../(account)/actions";
 import { OrderList } from "../(account)/OrderList";
 import { ProfileForm } from "../(account)/ProfileForm";
@@ -13,7 +12,7 @@ import { ProfileForm } from "../(account)/ProfileForm";
 const ORDER_PREVIEW_COUNT = 3;
 
 export const metadata: Metadata = {
-  title: `My account | ${COMPANY_NAME}`,
+  title: "My account | X-Spelled",
 };
 
 export default function AccountPage() {

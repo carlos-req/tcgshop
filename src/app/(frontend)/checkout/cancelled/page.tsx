@@ -1,10 +1,8 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 
-import { COMPANY_NAME } from "@/lib/site";
-
 export const metadata: Metadata = {
-  title: `Checkout cancelled | ${COMPANY_NAME}`,
+  title: "Checkout cancelled | X-Spelled",
 };
 
 export default function CheckoutCancelledPage() {

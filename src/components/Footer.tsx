@@ -1,6 +1,5 @@
 import { MessageCircle, Newspaper, ShieldCheck } from "lucide-react";
 import Link from "next/link";
-import { COMPANY_NAME } from "@/lib/site";
 
 const supportLinks = [
   { label: "Pre-order Policy & Guarantees", href: "/support/pre-order-policy" },
@@ -26,7 +25,7 @@ export function Footer() {
         <div className="grid gap-10 md:grid-cols-3">
           <div>
             <p className="font-display text-lg font-semibold text-on-surface">
-              {COMPANY_NAME}
+              X-Spelled
             </p>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-on-surface-variant">
               Sealed booster boxes and packs, checked before they ship.
@@ -70,7 +69,7 @@ export function Footer() {
         <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-white/5 pt-6">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
             <p className="text-sm text-outline">
-              © 2026 {COMPANY_NAME}. All rights reserved.
+              © 2026 X-Spelled. All rights reserved.
             </p>
             <ul className="flex flex-wrap items-center gap-x-4 gap-y-2">
               {legalLinks.map((link) => (

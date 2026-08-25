@@ -4,12 +4,11 @@ import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 
 import { getCurrentCustomer } from "@/lib/auth";
-import { COMPANY_NAME } from "@/lib/site";
 import { signupAction } from "../(account)/actions";
 import { AuthField, AuthForm } from "../(account)/AuthForm";
 
 export const metadata: Metadata = {
-  title: `Create account | ${COMPANY_NAME}`,
+  title: "Create account | X-Spelled",
 };
 
 export default function SignupPage() {

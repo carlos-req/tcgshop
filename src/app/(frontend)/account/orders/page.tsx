@@ -5,11 +5,10 @@ import type { Metadata } from "next";
 
 import { getCurrentCustomer } from "@/lib/auth";
 import { getCustomerOrders } from "@/data/orders";
-import { COMPANY_NAME } from "@/lib/site";
 import { OrderList } from "../../(account)/OrderList";
 
 export const metadata: Metadata = {
-  title: `Order history | ${COMPANY_NAME}`,
+  title: "Order history | X-Spelled",
 };
 
 export default function OrderHistoryPage() {

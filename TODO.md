@@ -45,7 +45,7 @@ Decisions locked in: Supabase for Postgres hosting only (not auth); a separate `
 - Privacy Policy, Terms of Service, Returns/Refund Policy, and a cookie notice if analytics/tracking is ever added.
 - Scaffolded routes with clearly-marked placeholder copy describing what each policy needs to cover — not binding legal text. Real copy needs actual legal review before launch.
 - **Done** (branch `feature/auth`, not yet merged): `/legal/privacy-policy`, `/legal/terms-of-service`, `/legal/returns-policy`, linked from the footer (which also gained a "Legal" links row — "Returns & Authenticity" now points at the real Returns Policy page instead of a dead `/support/returns` link). Shared `legal/layout.tsx` renders a "draft placeholder, not binding" notice on every page. Cookie notice still skipped — no analytics/tracking in the app yet, per plan.
-- **Also added**: `COMPANY_NAME` constant in `src/lib/site.ts` — every place the brand/company name appeared in the UI (header, footer, all page `<title>`s, legal copy) now reads from it, so renaming the company is a one-line change.
+- **Also added**: `COMPANY_NAME` constant in `src/lib/site.ts`, used only in the legal-page copy (by design — header/footer/page `<title>`s keep the literal "X-Spelled" brand name, which is a separate concern from the legal entity name referenced in policy text).
 
 ## 13. Pre-launch checklist
 - **Order confirmation email**: no email adapter is configured yet (`No email adapter provided` warning on startup) — the checkout success banner already claims "you'll receive a confirmation email shortly," which isn't true today. Needs a real adapter (e.g. Resend, Postmark) in `payload.config.ts`.
