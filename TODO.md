@@ -1,6 +1,6 @@
 # TODO — remaining work from plan.md
 
-Increments sized for one or two prompts each, in dependency order. Status reflects what's actually in the codebase as of 2026-08-24. Items 1–6 (Orders collection, CMS data swap, seeding, type generation, lint fix, slug-based routes, Stripe checkout + webhook, end-to-end validation) are complete — see git history / plan.md for details.
+Increments sized for one or two prompts each, in dependency order. Status reflects what's actually in the codebase as of 2026-08-25. Items 1–6 (Orders collection, CMS data swap, seeding, type generation, lint fix, slug-based routes, Stripe checkout + webhook, end-to-end validation) are complete — see git history / plan.md for details.
 
 ## Remaining known items (not blockers, tracked for later)
 - **5a** (production webhook config): the real webhook path is proven end-to-end via `stripe listen` for local dev. Before deploying, still need a Stripe Dashboard webhook endpoint pointing at the deployed `/api/stripe/webhook` URL, with that environment's own `STRIPE_WEBHOOK_SECRET`.
@@ -13,45 +13,17 @@ Increments sized for one or two prompts each, in dependency order. Status reflec
 
 Decisions locked in: Supabase for Postgres hosting only (not auth); a separate `Customers` collection for shopper accounts (never the same login as admin `Users`); design pass starts now, in parallel with the rest; legal pages get scaffolded with placeholder text, not real copy.
 
-## 7. Design pass — homepage/category hierarchy
-- Homepage and category pages currently share one generic `HeroSection` + `ProductCardSection` layout with no real distinction between "landing page" and "browse this category." Overall look reads as templated/AI-generated.
-- Use the `frontend-design` skill. In scope: homepage, category page, product detail page, shared header/footer/hero. Out of scope: Payload's admin UI.
-- **Done** — merged via PR #7 (`design/homepage-category-hierarchy`, commit 8e18e99): `HomeHero`, `CategoryStrip`, `ShopByGame`, `NewArrivals`, `HoloCard` components, `(frontend)/layout.tsx`, gold/bold design pass, `DESIGN-GUIDE.md`.
+Items 7 (design pass), 9 (`Customers` collection + account pages), 10 (multi-item cart), 11 (orders linked to customers + order history), and 12 (legal pages) are complete — merged via PR #7 and PR #8 (`feature/auth`). See git history for details.
 
 ## 8. Supabase Postgres migration
-- Provision a Supabase Postgres database, point `DATABASE_URL` at it, verify all collections (including the new `Customers` from #9) come up clean against it.
+- Provision a Supabase Postgres database, point `DATABASE_URL` at it, verify all collections (including `Customers`) come up clean against it.
 - Decide re-seed vs. dump/restore for current dev data (likely re-seed, given today's data is two demo products).
 - **Not started.**
-
-## 9. `Customers` collection (separate from admin `Users`)
-- New Payload collection, `auth: true`, for shopper accounts — never the same collection/login as staff `Users`.
-- Fields: first/last name, email (auth field), password (auth field), mobile phone, shipping address.
-- Customer-facing login/signup/logout pages under `(frontend)`, plus an editable `/account` profile page (name, phone, shipping address).
-- **Done** (branch `feature/auth`, pushed, not yet merged): `src/collections/Customers.ts`; `/login`, `/signup`, `/account` pages; server actions for login/signup/logout/profile update; access control scoped to each customer's own record (verified: cross-customer update returns 403).
-
-## 10. Multi-item cart
-- The biggest lift in phase 2. There is currently no cart at all — checkout is a single "Buy Now" flow (`/api/checkout` takes one product, quantity hardcoded to `1`).
-- Needs: client-side cart state persisted to `localStorage` (add/remove/adjust quantity), a cart UI (drawer or page), `/api/checkout` extended to accept an array of `{ productId, quantity }` line items, and the webhook's stock-decrement + `Order`-creation logic extended to handle multiple line items per session instead of one.
-- **Done** (branch `feature/auth`, not yet merged): `CartProvider`/`useCart` (`src/lib/cart-context.tsx`) holds cart state in a reducer, persisted to `localStorage`; slide-out `CartDrawer` opened from a new header cart icon; `AddToCartButton` replaces the old instant-checkout `BuyButton` everywhere (in-stock and preorder items both add to cart, per decision). `Orders.lineItems` is now an array field (was a single `product`/`quantity` pair); `/api/checkout` accepts `{ items: [{ categorySlug, productSlug, quantity }] }`, validates each against live stock/status; the webhook re-fetches actual purchased items via `stripe.checkout.sessions.listLineItems` (not client-supplied metadata) and decrements stock per line item. Success/cancel now redirect to generic `/checkout/success` (clears the cart) and `/checkout/cancelled` (cart preserved) instead of back to a single product page. Verified end-to-end with a real Stripe test-mode session (multi-item, mixed in-stock + preorder) and a signed synthetic webhook event: order + line items + stock decrement + `/account/orders` rendering, and cross-customer isolation, all correct.
-
-## 11. Orders linked to customers + order history
-- Add a `customer` relationship field to `Orders` (optional, since guest checkout must keep working).
-- Stamp the logged-in customer's id into Checkout Session metadata at checkout time (same mechanism as `productId`/`categorySlug`/`productSlug` today), so the webhook can link the resulting order.
-- New authenticated route (e.g. `/account/orders`) showing a customer's own order history.
-- **Important pre-existing gap to fix as part of this**: `Orders.access.read` currently allows *any* logged-in user to read *any* order (`Boolean(user)`) — that was fine when only admin staff could log in, but the moment `Customers` (#9) exists, this must be scoped so a customer can only ever read their own orders.
-- **Done** (branch `feature/auth`, not yet merged): `customer` relation on `Orders`; `/api/checkout` stamps `customerId` into session metadata when logged in; webhook links the resulting order; `Orders.access` scoped (admins full access, customers only `{ customer: { equals: user.id } }`, guest orders admin-only); `/account` shows a 3-order preview with "View all", full history at `/account/orders`. Verified: cross-customer reads return zero docs / 403 on write.
-
-## 12. Legal pages (scaffolded, not real legal text)
-- Privacy Policy, Terms of Service, Returns/Refund Policy, and a cookie notice if analytics/tracking is ever added.
-- Scaffolded routes with clearly-marked placeholder copy describing what each policy needs to cover — not binding legal text. Real copy needs actual legal review before launch.
-- **Done** (branch `feature/auth`, not yet merged): `/legal/privacy-policy`, `/legal/terms-of-service`, `/legal/returns-policy`, linked from the footer (which also gained a "Legal" links row — "Returns & Authenticity" now points at the real Returns Policy page instead of a dead `/support/returns` link). Shared `legal/layout.tsx` renders a "draft placeholder, not binding" notice on every page. Cookie notice still skipped — no analytics/tracking in the app yet, per plan.
-- **Also added**: `COMPANY_NAME` constant in `src/lib/site.ts`, used only in the legal-page copy (by design — header/footer/page `<title>`s keep the literal "X-Spelled" brand name, which is a separate concern from the legal entity name referenced in policy text).
 
 ## 13. Pre-launch checklist
 - **Order confirmation email**: no email adapter is configured yet (`No email adapter provided` warning on startup) — the checkout success banner already claims "you'll receive a confirmation email shortly," which isn't true today. Needs a real adapter (e.g. Resend, Postmark) in `payload.config.ts`. **Not started.**
 - Clear separation of test vs. live Stripe keys per environment. **Not started.**
 - Production Stripe webhook endpoint registered in the Dashboard (this is #5a above, carried forward). **Not started.**
-- ~~SEO basics: `robots.txt`, sitemap, Open Graph images (per-page metadata already exists via `generateMetadata`).~~ **Done** (branch `feature/auth`, not yet merged): `src/app/robots.ts` (disallows `/admin`, `/api`, `/account`, `/checkout`), `src/app/sitemap.ts` (home, legal pages, categories, products — pulled live from the CMS), `metadataBase` + `openGraph`/`twitter` defaults on the root layout, a generated default OG/Twitter card image (`next/og`, no static asset needed), and real per-product OG images using the product's own photo. Needs `NEXT_PUBLIC_SITE_URL` set in the deployed environment once a production domain exists (falls back to `localhost:3000` for dev) — see `src/lib/site.ts`.
 - Error/monitoring for `/api/checkout` and the webhook route beyond console logs. **Not started.**
 - Confirm Supabase's backup/PITR settings once #8 is done. **Not started.**
-- ~~Accessibility pass (keyboard nav, focus states, alt-text spot check) — natural to fold into #7's design pass.~~ **Done** (branch `feature/auth`, not yet merged): alt-text audit found no gaps (decorative images already `alt=""`/`aria-hidden`, content images already descriptive). Fixed two real gaps found during the pass: (1) category nav links were completely unreachable below the `lg` breakpoint with no fallback — added a mobile menu (`Header.tsx`) with proper `aria-expanded`/`aria-controls`, Escape-to-close, and closes on navigation; (2) `CartDrawer` is a custom modal that wasn't trapping focus — background content is now `inert` while it's open (`AppShell.tsx`), focus moves to the dialog on open and returns to the trigger on close. Not verified in an actual browser this session (no browser extension connected) — worth a manual keyboard/screen-reader pass before launch.
+- SEO basics and an accessibility pass are done — see git history. One follow-up remains: the mobile menu and cart-drawer focus trap were verified structurally but not in an actual browser (no browser extension connected when built) — worth a manual keyboard/screen-reader pass before launch.
