@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { ArrowLeft, ShieldCheck, Truck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { BuyButton } from "@/components/BuyButton";
+import { AddToCartButton } from "@/components/AddToCartButton";
 import { getCategoryBySlug } from "@/data/categories";
 import { getProductBySlug } from "@/data/products";
 import { formatPrice, getButtonConfig } from "@/lib/product-display";
@@ -14,7 +14,6 @@ export const instant = false;
 
 interface ProductPageProps {
   params: Promise<{ categorySlug: string; productSlug: string }>;
-  searchParams: Promise<{ checkout?: string }>;
 }
 
 export async function generateMetadata({
@@ -31,12 +30,8 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProductPage({
-  params,
-  searchParams,
-}: ProductPageProps) {
+export default async function ProductPage({ params }: ProductPageProps) {
   const { categorySlug, productSlug } = await params;
-  const { checkout } = await searchParams;
 
   const category = await getCategoryBySlug(categorySlug);
   if (!category) notFound();
@@ -49,18 +44,6 @@ export default async function ProductPage({
   return (
     <div className="bg-surface">
       <div className="mx-auto max-w-container px-8 py-12">
-        {checkout === "success" && (
-          <p className="mb-6 rounded-lg border border-primary-dim/40 bg-primary-dim/10 px-4 py-3 text-sm text-primary-dim">
-            Payment successful — thanks for your order! You&apos;ll receive a
-            confirmation email shortly.
-          </p>
-        )}
-        {checkout === "cancelled" && (
-          <p className="mb-6 rounded-lg border border-outline-variant/40 bg-surface-container-low px-4 py-3 text-sm text-on-surface-variant">
-            Checkout was cancelled — you have not been charged.
-          </p>
-        )}
-
         <Link
           href={`/${category.slug}`}
           className="inline-flex items-center gap-2 text-sm text-on-surface-variant transition-colors hover:text-on-surface"
@@ -111,9 +94,8 @@ export default async function ProductPage({
             )}
 
             <div className="mt-8 flex flex-wrap gap-4">
-              <BuyButton
-                categorySlug={category.slug}
-                productSlug={product.slug}
+              <AddToCartButton
+                product={product}
                 label={button.label}
                 className={`inline-flex items-center gap-2 rounded-lg px-8 py-3.5 font-display text-sm font-bold uppercase tracking-wide transition-colors ${button.className}`}
                 disabled={button.disabled}

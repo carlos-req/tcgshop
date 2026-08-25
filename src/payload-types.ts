@@ -269,12 +269,19 @@ export interface Order {
   id: number;
   stripeSessionId: string;
   stripePaymentIntentId?: string | null;
-  product: number | Product;
   /**
    * Linked when the shopper was logged in at checkout. Empty for guest checkouts.
    */
   customer?: (number | null) | Customer;
-  quantity: number;
+  lineItems: {
+    product: number | Product;
+    quantity: number;
+    /**
+     * Price per unit at time of purchase, in the smallest currency unit (e.g. cents).
+     */
+    unitAmount: number;
+    id?: string | null;
+  }[];
   /**
    * Total charged, in the smallest currency unit (e.g. cents).
    */
@@ -507,9 +514,15 @@ export interface ProductsSelect<T extends boolean = true> {
 export interface OrdersSelect<T extends boolean = true> {
   stripeSessionId?: T;
   stripePaymentIntentId?: T;
-  product?: T;
   customer?: T;
-  quantity?: T;
+  lineItems?:
+    | T
+    | {
+        product?: T;
+        quantity?: T;
+        unitAmount?: T;
+        id?: T;
+      };
   amountTotal?: T;
   currency?: T;
   customerEmail?: T;

@@ -8,7 +8,6 @@ export const Orders: CollectionConfig = {
     useAsTitle: "stripeSessionId",
     defaultColumns: [
       "stripeSessionId",
-      "product",
       "customerEmail",
       "status",
       "amountTotal",
@@ -42,13 +41,6 @@ export const Orders: CollectionConfig = {
       index: true,
     },
     {
-      name: "product",
-      type: "relationship",
-      relationTo: "products",
-      required: true,
-      index: true,
-    },
-    {
       name: "customer",
       type: "relationship",
       relationTo: "customers",
@@ -59,11 +51,36 @@ export const Orders: CollectionConfig = {
       },
     },
     {
-      name: "quantity",
-      type: "number",
+      name: "lineItems",
+      type: "array",
       required: true,
-      min: 1,
-      defaultValue: 1,
+      minRows: 1,
+      fields: [
+        {
+          name: "product",
+          type: "relationship",
+          relationTo: "products",
+          required: true,
+          index: true,
+        },
+        {
+          name: "quantity",
+          type: "number",
+          required: true,
+          min: 1,
+          defaultValue: 1,
+        },
+        {
+          name: "unitAmount",
+          type: "number",
+          required: true,
+          min: 0,
+          admin: {
+            description:
+              "Price per unit at time of purchase, in the smallest currency unit (e.g. cents).",
+          },
+        },
+      ],
     },
     {
       name: "amountTotal",

@@ -1,9 +1,10 @@
 "use client";
 
-import { Search, User } from "lucide-react";
+import { Search, ShoppingBag, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useState, type ChangeEvent, type SubmitEvent } from "react";
+import { useCart } from "@/lib/cart-context";
 
 const navLinks: Array<{ label: string; href: string }> = [
   { label: "Palworld", href: "/palworld" },
@@ -13,6 +14,7 @@ const navLinks: Array<{ label: string; href: string }> = [
 
 export function Header() {
   const pathname = usePathname();
+  const { itemCount, openCart } = useCart();
   const [searchQuery, setSearchQuery] = useState("");
   const handleSearchChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -82,6 +84,22 @@ export function Header() {
         </form>
 
         <div className="ml-auto flex items-center gap-4">
+          <button
+            type="button"
+            onClick={openCart}
+            className="text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface relative cursor-pointer rounded-full p-2 transition-colors"
+            aria-label={`Cart${itemCount > 0 ? `, ${itemCount} item${itemCount === 1 ? "" : "s"}` : ""}`}
+          >
+            <ShoppingBag className="size-5" />
+            {itemCount > 0 && (
+              <span
+                aria-hidden="true"
+                className="bg-primary text-on-primary absolute -top-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full text-[10px] font-semibold"
+              >
+                {itemCount > 9 ? "9+" : itemCount}
+              </span>
+            )}
+          </button>
           <Link
             href="/account"
             className="text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded-full p-2 transition-colors"

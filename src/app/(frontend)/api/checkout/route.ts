@@ -3,40 +3,90 @@ import { getProductForCheckout } from "@/data/products";
 import { getPayloadClient } from "@/lib/payload";
 import { getStripeClient } from "@/lib/stripe";
 
+const MAX_LINE_ITEMS = 50;
+const MAX_QUANTITY_PER_ITEM = 20;
+
+interface CartItemInput {
+  categorySlug: string;
+  productSlug: string;
+  quantity: number;
+}
+
+function parseItems(body: unknown): CartItemInput[] | null {
+  if (!body || typeof body !== "object" || !("items" in body)) return null;
+  const { items } = body as { items: unknown };
+  if (!Array.isArray(items) || items.length === 0) return null;
+  if (items.length > MAX_LINE_ITEMS) return null;
+
+  const parsed: CartItemInput[] = [];
+  for (const raw of items) {
+    if (!raw || typeof raw !== "object") return null;
+    const { categorySlug, productSlug, quantity } = raw as Record<
+      string,
+      unknown
+    >;
+    if (typeof categorySlug !== "string" || typeof productSlug !== "string") {
+      return null;
+    }
+    if (
+      typeof quantity !== "number" ||
+      !Number.isInteger(quantity) ||
+      quantity < 1 ||
+      quantity > MAX_QUANTITY_PER_ITEM
+    ) {
+      return null;
+    }
+    parsed.push({ categorySlug, productSlug, quantity });
+  }
+
+  return parsed;
+}
+
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
-  const categorySlug = body?.categorySlug;
-  const productSlug = body?.productSlug;
+  const items = parseItems(body);
 
-  if (typeof categorySlug !== "string" || typeof productSlug !== "string") {
+  if (!items) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 
-  const product = await getProductForCheckout(categorySlug, productSlug);
+  const lineItems: { price: string; quantity: number }[] = [];
 
-  if (!product) {
-    return NextResponse.json({ error: "Product not found" }, { status: 404 });
-  }
-
-  if (product.status === "out_of_stock") {
-    return NextResponse.json(
-      { error: "Product is out of stock" },
-      { status: 409 },
+  for (const item of items) {
+    const product = await getProductForCheckout(
+      item.categorySlug,
+      item.productSlug,
     );
-  }
 
-  if (product.status === "in_stock" && product.stock < 1) {
-    return NextResponse.json(
-      { error: "Product is out of stock" },
-      { status: 409 },
-    );
-  }
+    if (!product) {
+      return NextResponse.json(
+        { error: "One of the items in your cart is no longer available" },
+        { status: 404 },
+      );
+    }
 
-  if (!product.stripePriceId) {
-    return NextResponse.json(
-      { error: "Product is not available for checkout yet" },
-      { status: 422 },
-    );
+    if (product.status === "out_of_stock") {
+      return NextResponse.json(
+        { error: `${product.name} is out of stock` },
+        { status: 409 },
+      );
+    }
+
+    if (product.status === "in_stock" && product.stock < item.quantity) {
+      return NextResponse.json(
+        { error: `Only ${product.stock} left of ${product.name}` },
+        { status: 409 },
+      );
+    }
+
+    if (!product.stripePriceId) {
+      return NextResponse.json(
+        { error: `${product.name} is not available for checkout yet` },
+        { status: 422 },
+      );
+    }
+
+    lineItems.push({ price: product.stripePriceId, quantity: item.quantity });
   }
 
   const origin = request.headers.get("origin") ?? new URL(request.url).origin;
@@ -48,7 +98,7 @@ export async function POST(request: Request) {
 
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
-    line_items: [{ price: product.stripePriceId, quantity: 1 }],
+    line_items: lineItems,
     shipping_address_collection: { allowed_countries: ["US"] },
     shipping_options: [
       {
@@ -59,12 +109,9 @@ export async function POST(request: Request) {
         },
       },
     ],
-    success_url: `${origin}/${categorySlug}/${productSlug}?checkout=success`,
-    cancel_url: `${origin}/${categorySlug}/${productSlug}?checkout=cancelled`,
+    success_url: `${origin}/checkout/success`,
+    cancel_url: `${origin}/checkout/cancelled`,
     metadata: {
-      productId: product.id,
-      categorySlug,
-      productSlug,
       ...(customerId ? { customerId: String(customerId) } : {}),
     },
   });

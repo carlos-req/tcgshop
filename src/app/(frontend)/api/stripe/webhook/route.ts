@@ -39,13 +39,58 @@ async function handleCheckoutSessionCompleted(
 ) {
   if (session.payment_status !== "paid") return;
 
-  const productId = session.metadata?.productId;
-  if (!productId) return;
-
   const customerId = session.metadata?.customerId;
 
   const payload = await getPayloadClient();
-  const quantity = 1;
+  const stripe = getStripeClient();
+
+  // Stripe, not our own metadata, is the source of truth for what was
+  // actually purchased and at what price — line items are re-fetched here
+  // rather than trusted from client-supplied cart state.
+  const stripeLineItems = await stripe.checkout.sessions.listLineItems(
+    session.id,
+    { limit: 100 },
+  );
+
+  const priceIds = stripeLineItems.data
+    .map((item) => item.price?.id)
+    .filter((id): id is string => Boolean(id));
+
+  const productsResult = priceIds.length
+    ? await payload.find({
+        collection: "products",
+        where: { stripePriceId: { in: priceIds } },
+        limit: priceIds.length,
+      })
+    : { docs: [] };
+
+  const productByPriceId = new Map(
+    productsResult.docs
+      .filter((product) => product.stripePriceId)
+      .map((product) => [product.stripePriceId as string, product]),
+  );
+
+  const lineItems = stripeLineItems.data.flatMap((item) => {
+    const priceId = item.price?.id;
+    const product = priceId ? productByPriceId.get(priceId) : undefined;
+    if (!product) return [];
+
+    return [
+      {
+        product: product.id,
+        quantity: item.quantity ?? 1,
+        unitAmount: item.price?.unit_amount ?? 0,
+      },
+    ];
+  });
+
+  if (lineItems.length === 0) {
+    console.error(
+      `No recognized line items for checkout session ${session.id} — skipping order creation`,
+    );
+    return;
+  }
+
   const shipping = session.collected_information?.shipping_details;
   const address = shipping?.address;
 
@@ -59,9 +104,8 @@ async function handleCheckoutSessionCompleted(
           typeof session.payment_intent === "string"
             ? session.payment_intent
             : (session.payment_intent?.id ?? undefined),
-        product: Number(productId),
         customer: customerId ? Number(customerId) : undefined,
-        quantity,
+        lineItems,
         amountTotal: session.amount_total ?? 0,
         currency: session.currency ?? "usd",
         customerEmail: session.customer_details?.email ?? "",
@@ -92,10 +136,15 @@ async function handleCheckoutSessionCompleted(
 
   if (!orderCreated) return;
 
-  const decremented = await decrementProductStock(productId, quantity);
-  if (!decremented) {
-    console.error(
-      `Stock decrement failed for product ${productId} (session ${session.id}) — product may be oversold, needs manual review`,
+  for (const item of lineItems) {
+    const decremented = await decrementProductStock(
+      String(item.product),
+      item.quantity,
     );
+    if (!decremented) {
+      console.error(
+        `Stock decrement failed for product ${item.product} (session ${session.id}) — product may be oversold, needs manual review`,
+      );
+    }
   }
 }

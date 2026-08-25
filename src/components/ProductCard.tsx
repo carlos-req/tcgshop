@@ -2,7 +2,7 @@ import { memo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types/product";
-import { BuyButton } from "@/components/BuyButton";
+import { AddToCartButton } from "@/components/AddToCartButton";
 import { formatPrice, getButtonConfig } from "@/lib/product-display";
 
 interface ProductCardProps {
@@ -49,9 +49,8 @@ function ProductCardComponent({ product }: ProductCardProps) {
           )}
         </div>
 
-        <BuyButton
-          categorySlug={product.category}
-          productSlug={product.slug}
+        <AddToCartButton
+          product={product}
           label={button.label}
           disabled={button.disabled}
           showIcon={false}
