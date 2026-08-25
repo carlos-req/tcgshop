@@ -24,6 +24,7 @@ interface PayloadProductDoc {
   images?: (PayloadMediaDoc | string | number)[] | null;
   stripePriceId?: string | null;
   category?: PayloadCategoryRef | string | number | null;
+  updatedAt?: string;
 }
 
 async function findProductDoc(
@@ -145,6 +146,36 @@ export async function getProductBySlug(
     sku: doc.sku ?? "",
     stock: doc.stock ?? 0,
   };
+}
+
+export interface SitemapProduct {
+  categorySlug: string;
+  productSlug: string;
+  updatedAt: string;
+}
+
+/** Server-only accessor for sitemap.ts — every product, across all categories. */
+export async function getAllProductsForSitemap(): Promise<SitemapProduct[]> {
+  const payload = await getPayloadClient();
+
+  const result = await payload.find({
+    collection: "products",
+    depth: 1,
+    limit: 1000,
+  });
+
+  return (result.docs as unknown as PayloadProductDoc[]).flatMap((doc) => {
+    const categorySlug =
+      typeof doc.category === "object" ? doc.category?.slug : undefined;
+    if (!categorySlug) return [];
+    return [
+      {
+        categorySlug,
+        productSlug: doc.slug,
+        updatedAt: doc.updatedAt ?? new Date().toISOString(),
+      },
+    ];
+  });
 }
 
 export interface CheckoutProduct {

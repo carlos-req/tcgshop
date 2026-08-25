@@ -1,12 +1,13 @@
 import type { CollectionConfig } from "payload";
 
+import { isAdminUser } from "@/lib/access";
+
 export const Orders: CollectionConfig = {
   slug: "orders",
   admin: {
     useAsTitle: "stripeSessionId",
     defaultColumns: [
       "stripeSessionId",
-      "product",
       "customerEmail",
       "status",
       "amountTotal",
@@ -14,10 +15,17 @@ export const Orders: CollectionConfig = {
     ],
   },
   access: {
-    read: ({ req: { user } }) => Boolean(user),
+    read: ({ req: { user } }) => {
+      if (isAdminUser(user)) return true;
+      if (!user) return false;
+      // A customer can only ever see their own orders — guest checkouts
+      // (no linked customer) are admin-only, since there's no account to
+      // scope them to.
+      return { customer: { equals: user.id } };
+    },
     create: () => false,
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => Boolean(user),
+    update: ({ req: { user } }) => isAdminUser(user),
+    delete: ({ req: { user } }) => isAdminUser(user),
   },
   fields: [
     {
@@ -33,18 +41,46 @@ export const Orders: CollectionConfig = {
       index: true,
     },
     {
-      name: "product",
+      name: "customer",
       type: "relationship",
-      relationTo: "products",
-      required: true,
+      relationTo: "customers",
       index: true,
+      admin: {
+        description:
+          "Linked when the shopper was logged in at checkout. Empty for guest checkouts.",
+      },
     },
     {
-      name: "quantity",
-      type: "number",
+      name: "lineItems",
+      type: "array",
       required: true,
-      min: 1,
-      defaultValue: 1,
+      minRows: 1,
+      fields: [
+        {
+          name: "product",
+          type: "relationship",
+          relationTo: "products",
+          required: true,
+          index: true,
+        },
+        {
+          name: "quantity",
+          type: "number",
+          required: true,
+          min: 1,
+          defaultValue: 1,
+        },
+        {
+          name: "unitAmount",
+          type: "number",
+          required: true,
+          min: 0,
+          admin: {
+            description:
+              "Price per unit at time of purchase, in the smallest currency unit (e.g. cents).",
+          },
+        },
+      ],
     },
     {
       name: "amountTotal",

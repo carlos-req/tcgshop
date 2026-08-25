@@ -1,9 +1,16 @@
 "use client";
 
-import { Search, User } from "lucide-react";
+import { Menu, Search, ShoppingBag, User, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useState, type ChangeEvent, type SubmitEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type SubmitEvent,
+} from "react";
+import { useCart } from "@/lib/cart-context";
 
 const navLinks: Array<{ label: string; href: string }> = [
   { label: "Palworld", href: "/palworld" },
@@ -13,7 +20,30 @@ const navLinks: Array<{ label: string; href: string }> = [
 
 export function Header() {
   const pathname = usePathname();
+  const { itemCount, openCart } = useCart();
   const [searchQuery, setSearchQuery] = useState("");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Close the mobile menu on navigation — it's the only way below the `lg`
+  // breakpoint to reach category pages, so it needs to behave like real
+  // navigation, not a leftover overlay. Adjusting state during render (per
+  // React's docs) rather than in an effect, since this is just resetting
+  // state in response to a prop (pathname) changing.
+  const [lastPathname, setLastPathname] = useState(pathname);
+  if (pathname !== lastPathname) {
+    setLastPathname(pathname);
+    setIsMenuOpen(false);
+  }
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setIsMenuOpen(false);
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isMenuOpen]);
+
   const handleSearchChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       setSearchQuery(event.target.value);
@@ -84,13 +114,71 @@ export function Header() {
         <div className="ml-auto flex items-center gap-4">
           <button
             type="button"
-            className="text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface cursor-pointer rounded-full p-2 transition-colors"
+            onClick={openCart}
+            className="text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface relative cursor-pointer rounded-full p-2 transition-colors"
+            aria-label={`Cart${itemCount > 0 ? `, ${itemCount} item${itemCount === 1 ? "" : "s"}` : ""}`}
+          >
+            <ShoppingBag className="size-5" />
+            {itemCount > 0 && (
+              <span
+                aria-hidden="true"
+                className="bg-primary text-on-primary absolute -top-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full text-[10px] font-semibold"
+              >
+                {itemCount > 9 ? "9+" : itemCount}
+              </span>
+            )}
+          </button>
+          <Link
+            href="/account"
+            className="text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded-full p-2 transition-colors"
             aria-label="Account"
           >
             <User className="size-5" />
+          </Link>
+          <button
+            type="button"
+            onClick={() => setIsMenuOpen((current) => !current)}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-nav"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            className="text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface cursor-pointer rounded-full p-2 transition-colors lg:hidden"
+          >
+            {isMenuOpen ? (
+              <X className="size-5" />
+            ) : (
+              <Menu className="size-5" />
+            )}
           </button>
         </div>
       </div>
+
+      {isMenuOpen && (
+        <nav
+          id="mobile-nav"
+          aria-label="Categories"
+          className="border-t border-white/5 bg-surface-container-lowest lg:hidden"
+        >
+          <ul className="max-w-container mx-auto flex flex-col gap-1 px-8 py-4">
+            {navLinks.map((link) => {
+              const active = pathname?.startsWith(link.href);
+              return (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    className={`block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                      active
+                        ? "bg-surface-container-high text-on-surface"
+                        : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      )}
     </header>
   );
 }
