@@ -97,6 +97,10 @@ Important validation:
 - Confirm stock is checked server-side before creating the Stripe session
 - Use CMS data as the pricing source, not browser state
 
+Shipping:
+
+- Products are physical goods (booster packs/bundles), so the Checkout Session must collect a shipping address (`shipping_address_collection`) and a shipping rate or cost — don't let customers pay with no way to collect where to ship
+
 ### 6) Stripe webhook and order processing
 
 When Stripe payment succeeds:
@@ -104,6 +108,7 @@ When Stripe payment succeeds:
 - confirm order payload
 - save order record in the CMS or a dedicated orders collection
 - decrement product stock or mark the product unavailable based on business rules
+  - decrement must be atomic/conditional (e.g. `WHERE stock > 0`), not read-then-write, to avoid overselling the last unit(s) under concurrent checkouts
 - handle failed/cancelled payment states without decrementing inventory
 
 This is the critical point where product status and inventory stay in sync with real commerce events.
@@ -122,7 +127,7 @@ This is the critical point where product status and inventory stay in sync with 
    - Categories
    - Products
    - Media
-   - Orders
+   - Orders (contains customer PII — address, email; restrict read/update access to admins only)
 
 4. Replace static product source
    - Move from hardcoded `src/data/products.ts` to CMS-driven data fetches

@@ -1,36 +1,9 @@
 import { memo } from "react";
 import Image from "next/image";
-import type { Product, StockStatus } from "@/types/product";
-
-function formatPrice(value: number) {
-  return `$${value.toFixed(2)}`;
-}
-
-function getButtonConfig(status: StockStatus) {
-  switch (status) {
-    case "in_stock":
-      return {
-        label: "Add to Cart",
-        className:
-          "bg-primary text-on-primary hover:bg-primary-dim hover:glow-primary",
-        disabled: false,
-      };
-    case "coming_soon":
-      return {
-        label: "Preorder",
-        className:
-          "bg-secondary text-white preorder-pulse hover:bg-secondary/90",
-        disabled: false,
-      };
-    case "out_of_stock":
-      return {
-        label: "Out of Stock",
-        className:
-          "cursor-not-allowed bg-surface-container-highest text-on-surface-variant",
-        disabled: true,
-      };
-  }
-}
+import Link from "next/link";
+import type { Product } from "@/types/product";
+import { AddToCartButton } from "@/components/AddToCartButton";
+import { formatPrice, getButtonConfig } from "@/lib/product-display";
 
 interface ProductCardProps {
   product: Product;
@@ -39,41 +12,50 @@ interface ProductCardProps {
 function ProductCardComponent({ product }: ProductCardProps) {
   const button = getButtonConfig(product.status);
 
-  return (
-    <article className="glass-card glass-card-hover flex flex-col overflow-hidden rounded-lg">
-      <div className="relative aspect-square bg-surface-container-low">
-        <Image
-          src={product.image}
-          alt={product.name}
-          fill
-          className="object-cover object-center"
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-        />
-      </div>
+  const href = `/${product.category}/${product.slug}`;
 
-      <div className="flex flex-1 flex-col p-4">
-        <div className="mb-2 flex flex-wrap items-baseline gap-2">
-          <span className="font-display text-lg font-bold text-primary-dim">
+  return (
+    <article className="tcg-card tcg-card-hover flex flex-col overflow-hidden rounded-xl">
+      <Link
+        href={href}
+        className="relative block aspect-square bg-surface-container-low"
+      >
+        {product.image && (
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            className="object-cover object-center"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+          />
+        )}
+      </Link>
+
+      <div className="flex flex-col gap-1.5 p-2.5">
+        <Link href={href}>
+          <h3 className="line-clamp-1 text-sm leading-snug text-on-surface hover:text-primary-dim">
+            {product.name}
+          </h3>
+        </Link>
+
+        <div className="flex items-baseline gap-2">
+          <span className="font-display text-base font-semibold text-primary-dim">
             {formatPrice(product.price)}
           </span>
           {product.originalPrice && (
-            <span className="text-sm text-on-surface-variant line-through">
+            <span className="text-xs text-on-surface-variant line-through">
               {formatPrice(product.originalPrice)}
             </span>
           )}
         </div>
 
-        <h3 className="line-clamp-3 flex-1 text-sm leading-snug text-on-surface">
-          {product.name}
-        </h3>
-
-        <button
-          type="button"
+        <AddToCartButton
+          product={product}
+          label={button.label}
           disabled={button.disabled}
-          className={`mt-4 w-full rounded-lg px-4 py-2.5 font-display text-xs font-bold uppercase tracking-wide transition-all ${button.className}`}
-        >
-          {button.label}
-        </button>
+          showIcon={false}
+          className={`w-full rounded-full py-1.5 text-xs font-semibold transition-colors ${button.className}`}
+        />
       </div>
     </article>
   );

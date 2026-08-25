@@ -4,12 +4,18 @@ import Link from "next/link";
 const supportLinks = [
   { label: "Pre-order Policy & Guarantees", href: "/support/pre-order-policy" },
   { label: "Shipping & Tracking Info", href: "/support/shipping" },
-  { label: "Returns & Authenticity", href: "/support/returns" },
+  { label: "Returns & Authenticity", href: "/legal/returns-policy" },
 ];
 
 const communityLinks = [
   { label: "Discord Server", href: "https://discord.gg", icon: MessageCircle },
   { label: "Collector's Blog", href: "/blog", icon: Newspaper },
+];
+
+const legalLinks = [
+  { label: "Privacy Policy", href: "/legal/privacy-policy" },
+  { label: "Terms of Service", href: "/legal/terms-of-service" },
+  { label: "Returns Policy", href: "/legal/returns-policy" },
 ];
 
 export function Footer() {
@@ -18,17 +24,16 @@ export function Footer() {
       <div className="mx-auto max-w-container px-8 py-12">
         <div className="grid gap-10 md:grid-cols-3">
           <div>
-            <p className="font-display text-sm font-extrabold tracking-[0.15em] text-on-surface">
-              X-SPELLED
+            <p className="font-display text-lg font-semibold text-on-surface">
+              X-Spelled
             </p>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-on-surface-variant">
-              The premier destination for high-end TCG collectors. Authentic
-              products, secure shipping.
+              Sealed booster boxes and packs, checked before they ship.
             </p>
           </div>
 
           <div>
-            <h4 className="text-label-mono text-on-surface">Support</h4>
+            <h4 className="text-sm font-semibold text-on-surface">Support</h4>
             <ul className="mt-4 space-y-2">
               {supportLinks.map((link) => (
                 <li key={link.href}>
@@ -44,7 +49,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-label-mono text-on-surface">Community</h4>
+            <h4 className="text-sm font-semibold text-on-surface">Community</h4>
             <ul className="mt-4 space-y-2">
               {communityLinks.map((link) => (
                 <li key={link.href}>
@@ -52,7 +57,7 @@ export function Footer() {
                     href={link.href}
                     className="inline-flex items-center gap-2 text-sm text-on-surface-variant transition-colors hover:text-on-surface"
                   >
-                    <link.icon className="size-4" />
+                    <link.icon className="size-4" aria-hidden="true" />
                     {link.label}
                   </Link>
                 </li>
@@ -62,14 +67,26 @@ export function Footer() {
         </div>
 
         <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-white/5 pt-6">
-          <p className="text-label-mono text-outline">
-            © 2026 X-SPELLED. ALL RIGHTS RESERVED.
-          </p>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <p className="text-sm text-outline">
+              © 2026 X-Spelled. All rights reserved.
+            </p>
+            <ul className="flex flex-wrap items-center gap-x-4 gap-y-2">
+              {legalLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-outline transition-colors hover:text-on-surface-variant"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
           <div className="flex items-center gap-3 text-outline">
-            <ShieldCheck className="size-5" aria-label="Verified secure" />
-            <div className="flex size-5 items-center justify-center rounded-full border border-outline-variant">
-              <span className="text-[10px] font-bold">✓</span>
-            </div>
+            <ShieldCheck className="size-5" aria-hidden="true" />
+            <span className="text-sm">Verified secure</span>
           </div>
         </div>
       </div>

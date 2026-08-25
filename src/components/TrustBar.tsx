@@ -24,7 +24,10 @@ export function TrustBar() {
             key={item.label}
             className="flex items-center gap-2 text-sm text-on-surface-variant"
           >
-            <item.icon className="size-3.5 shrink-0 text-primary-dim" />
+            <item.icon
+              className="size-3.5 shrink-0 text-primary-dim"
+              aria-hidden="true"
+            />
             <span>{item.label}</span>
           </div>
         ))}

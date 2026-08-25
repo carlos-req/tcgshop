@@ -2,17 +2,9 @@
 
 import { Search } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
-import { usePathname } from "next/navigation";
-import { getProductsByCategory } from "@/data/products";
-import type { ProductCategory } from "@/types/product";
+import type { Product } from "@/types/product";
 import { ProductCard } from "@/components/ProductCard";
 import { FilterSelect } from "@/components/FilterSelect";
-
-const categoryTitles: Record<ProductCategory, string> = {
-  palworld: "Palworld",
-  magic: "Magic: The Gathering",
-  pokemon: "Pokemon",
-};
 
 const sortOptions: { value: string; label: string }[] = [
   { value: "sales", label: "Sort: Sales" },
@@ -20,25 +12,30 @@ const sortOptions: { value: string; label: string }[] = [
   { value: "price-desc", label: "Price: High to Low" },
 ];
 
-function getCategoryFromPath(pathname: string | null): ProductCategory {
-  if (pathname?.startsWith("/magic")) return "magic";
-  if (pathname?.startsWith("/pokemon")) return "pokemon";
-  return "palworld";
+const priceRanges: { value: string; label: string; min: number; max: number | null }[] = [
+  { value: "all", label: "Price", min: 0, max: null },
+  { value: "0-20", label: "$0 – $20", min: 0, max: 20 },
+  { value: "21-50", label: "$21 – $50", min: 21, max: 50 },
+  { value: "51-100", label: "$51 – $100", min: 51, max: 100 },
+  { value: "101-150", label: "$101 – $150", min: 101, max: 150 },
+  { value: "150+", label: "$150+", min: 150, max: null },
+];
+
+interface ProductCardSectionProps {
+  products: Product[];
 }
 
-export function ProductCardSection() {
-  const pathname = usePathname();
-  const category = getCategoryFromPath(pathname);
-
+export function ProductCardSection({ products }: ProductCardSectionProps) {
   const [searchInput, setSearchInput] = useState("");
   const deferredSearchQuery = useDeferredValue(searchInput);
   const [inStockOnly, setInStockOnly] = useState(false);
+  const [priceRange, setPriceRange] = useState("all");
   const [sortBy, setSortBy] = useState<"sales" | "price-asc" | "price-desc">(
     "sales",
   );
 
   const filteredProducts = useMemo(() => {
-    let items = getProductsByCategory(category);
+    let items = products;
 
     if (deferredSearchQuery.trim()) {
       const query = deferredSearchQuery.toLowerCase();
@@ -51,6 +48,17 @@ export function ProductCardSection() {
       items = items.filter((product) => product.status === "in_stock");
     }
 
+    if (priceRange !== "all") {
+      const range = priceRanges.find((option) => option.value === priceRange);
+      if (range) {
+        items = items.filter(
+          (product) =>
+            product.price >= range.min &&
+            (range.max === null || product.price <= range.max),
+        );
+      }
+    }
+
     if (sortBy === "price-asc") {
       items = [...items].sort((a, b) => a.price - b.price);
     } else if (sortBy === "price-desc") {
@@ -58,16 +66,12 @@ export function ProductCardSection() {
     }
 
     return items;
-  }, [category, deferredSearchQuery, inStockOnly, sortBy]);
+  }, [products, deferredSearchQuery, inStockOnly, priceRange, sortBy]);
 
   return (
     <section className="bg-surface py-10 lg:py-14">
       <div className="mx-auto max-w-container px-8">
-        <h2 className="text-headline-md text-on-surface">
-          {categoryTitles[category]}
-        </h2>
-
-        <div className="mt-6 flex flex-wrap items-center gap-3">
+        <div className="sticky top-16 z-10 -mx-8 flex flex-wrap items-center gap-3 border-b border-outline-variant bg-surface/95 px-8 py-4 backdrop-blur-sm">
           <FilterSelect
             label="Sort: Sales"
             value={sortBy}
@@ -77,16 +81,10 @@ export function ProductCardSection() {
             options={sortOptions}
           />
 
-          <FilterSelect
-            label="Subcategories"
-            value="all"
-            onChange={() => {}}
-            options={[{ value: "all", label: "Subcategories" }]}
-          />
-
           <button
             type="button"
             onClick={() => setInStockOnly((current) => !current)}
+            aria-pressed={inStockOnly}
             className={`rounded-lg border px-4 py-2 text-sm transition-colors ${
               inStockOnly
                 ? "border-primary-dim/50 bg-primary-dim/10 text-primary-dim"
@@ -98,22 +96,28 @@ export function ProductCardSection() {
 
           <FilterSelect
             label="Price"
-            value="all"
-            onChange={() => {}}
-            options={[{ value: "all", label: "Price" }]}
+            value={priceRange}
+            onChange={setPriceRange}
+            options={priceRanges}
           />
 
           <div className="relative ml-auto w-full sm:w-64">
+            <label htmlFor="product-search" className="sr-only">
+              Search products
+            </label>
             <Search
               className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-outline"
-              aria-hidden
+              aria-hidden="true"
             />
             <input
+              id="product-search"
               type="search"
-              placeholder="Search..."
+              name="q"
+              autoComplete="off"
+              placeholder="Search…"
               value={searchInput}
               onChange={(event) => setSearchInput(event.target.value)}
-              className="w-full rounded-lg border border-outline-variant/60 bg-surface-container-low py-2 pl-10 pr-4 font-mono text-sm text-on-surface placeholder:text-outline/70 focus:border-primary-dim focus:outline-none focus:ring-1 focus:ring-primary-dim/30"
+              className="w-full rounded-lg border border-outline-variant/60 bg-surface-container-low py-2 pl-10 pr-4 font-mono text-sm text-on-surface placeholder:text-outline/70 focus-visible:border-primary-dim focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-dim/30"
             />
           </div>
         </div>
