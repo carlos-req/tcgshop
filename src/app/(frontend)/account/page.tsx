@@ -4,8 +4,12 @@ import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 
 import { getCurrentCustomer } from "@/lib/auth";
+import { getCustomerOrders } from "@/data/orders";
 import { logoutAction } from "../(account)/actions";
+import { OrderList } from "../(account)/OrderList";
 import { ProfileForm } from "../(account)/ProfileForm";
+
+const ORDER_PREVIEW_COUNT = 3;
 
 export const metadata: Metadata = {
   title: "My account | X-Spelled",
@@ -46,6 +50,8 @@ async function AccountContent() {
   })
     .format(new Date(customer.createdAt))
     .toUpperCase();
+
+  const orders = await getCustomerOrders(customer.id, ORDER_PREVIEW_COUNT);
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
@@ -100,21 +106,38 @@ async function AccountContent() {
       </section>
 
       <section className="tcg-card rounded-xl px-6 py-5">
-        <h2 className="text-label-mono text-on-surface-variant">
-          Order history
-        </h2>
-        <div className="mt-4 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-on-surface-variant text-sm">
-            Nothing in your binder yet — once you check out, your orders
-            will show up here.
-          </p>
-          <Link
-            href="/"
-            className="bg-primary text-on-primary hover:bg-primary-dim shrink-0 rounded-full px-5 py-2 text-sm font-semibold whitespace-nowrap transition-colors"
-          >
-            Browse the shop
-          </Link>
+        <div className="flex items-baseline justify-between gap-4">
+          <h2 className="text-label-mono text-on-surface-variant">
+            Order history
+          </h2>
+          {orders.length > 0 ? (
+            <Link
+              href="/account/orders"
+              className="text-primary hover:text-primary-dim text-sm font-medium"
+            >
+              View all
+            </Link>
+          ) : null}
         </div>
+
+        {orders.length > 0 ? (
+          <div className="mt-4">
+            <OrderList orders={orders} />
+          </div>
+        ) : (
+          <div className="mt-4 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-on-surface-variant text-sm">
+              Nothing in your binder yet — once you check out, your orders
+              will show up here.
+            </p>
+            <Link
+              href="/"
+              className="bg-primary text-on-primary hover:bg-primary-dim shrink-0 rounded-full px-5 py-2 text-sm font-semibold whitespace-nowrap transition-colors"
+            >
+              Browse the shop
+            </Link>
+          </div>
+        )}
       </section>
 
       <form action={logoutAction} className="self-start">

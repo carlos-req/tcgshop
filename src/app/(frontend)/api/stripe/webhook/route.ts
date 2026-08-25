@@ -42,6 +42,8 @@ async function handleCheckoutSessionCompleted(
   const productId = session.metadata?.productId;
   if (!productId) return;
 
+  const customerId = session.metadata?.customerId;
+
   const payload = await getPayloadClient();
   const quantity = 1;
   const shipping = session.collected_information?.shipping_details;
@@ -58,6 +60,7 @@ async function handleCheckoutSessionCompleted(
             ? session.payment_intent
             : (session.payment_intent?.id ?? undefined),
         product: Number(productId),
+        customer: customerId ? Number(customerId) : undefined,
         quantity,
         amountTotal: session.amount_total ?? 0,
         currency: session.currency ?? "usd",

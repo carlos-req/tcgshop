@@ -270,6 +270,10 @@ export interface Order {
   stripeSessionId: string;
   stripePaymentIntentId?: string | null;
   product: number | Product;
+  /**
+   * Linked when the shopper was logged in at checkout. Empty for guest checkouts.
+   */
+  customer?: (number | null) | Customer;
   quantity: number;
   /**
    * Total charged, in the smallest currency unit (e.g. cents).
@@ -504,6 +508,7 @@ export interface OrdersSelect<T extends boolean = true> {
   stripeSessionId?: T;
   stripePaymentIntentId?: T;
   product?: T;
+  customer?: T;
   quantity?: T;
   amountTotal?: T;
   currency?: T;

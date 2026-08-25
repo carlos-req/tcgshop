@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getProductForCheckout } from "@/data/products";
+import { getPayloadClient } from "@/lib/payload";
 import { getStripeClient } from "@/lib/stripe";
 
 export async function POST(request: Request) {
@@ -41,6 +42,10 @@ export async function POST(request: Request) {
   const origin = request.headers.get("origin") ?? new URL(request.url).origin;
   const stripe = getStripeClient();
 
+  const payload = await getPayloadClient();
+  const { user } = await payload.auth({ headers: request.headers });
+  const customerId = user?.collection === "customers" ? user.id : undefined;
+
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     line_items: [{ price: product.stripePriceId, quantity: 1 }],
@@ -60,6 +65,7 @@ export async function POST(request: Request) {
       productId: product.id,
       categorySlug,
       productSlug,
+      ...(customerId ? { customerId: String(customerId) } : {}),
     },
   });
 

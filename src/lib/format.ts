@@ -1,3 +1,12 @@
+const currencyFormatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
+
+export function formatCents(cents: number) {
+  return currencyFormatter.format(cents / 100);
+}
+
 export function formatPhone(value: string) {
   const digits = value.replace(/\D/g, "");
 

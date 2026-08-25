@@ -1,7 +1,6 @@
 import type { CollectionConfig } from "payload";
 
-const isAdminUser = (user: { collection: string } | null | undefined) =>
-  Boolean(user) && user!.collection === "users";
+import { isAdminUser } from "@/lib/access";
 
 export const Customers: CollectionConfig = {
   slug: "customers",

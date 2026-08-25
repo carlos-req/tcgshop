@@ -26,8 +26,8 @@ Decisions locked in: Supabase for Postgres hosting only (not auth); a separate `
 ## 9. `Customers` collection (separate from admin `Users`)
 - New Payload collection, `auth: true`, for shopper accounts — never the same collection/login as staff `Users`.
 - Fields: first/last name, email (auth field), password (auth field), mobile phone, shipping address.
-- Customer-facing login/signup/logout pages under `(frontend)`.
-- **In progress** (current branch `feature/auth`).
+- Customer-facing login/signup/logout pages under `(frontend)`, plus an editable `/account` profile page (name, phone, shipping address).
+- **Done** (branch `feature/auth`, pushed, not yet merged): `src/collections/Customers.ts`; `/login`, `/signup`, `/account` pages; server actions for login/signup/logout/profile update; access control scoped to each customer's own record (verified: cross-customer update returns 403).
 
 ## 10. Multi-item cart
 - The biggest lift in phase 2. There is currently no cart at all — checkout is a single "Buy Now" flow (`/api/checkout` takes one product, quantity hardcoded to `1`).
@@ -39,7 +39,7 @@ Decisions locked in: Supabase for Postgres hosting only (not auth); a separate `
 - Stamp the logged-in customer's id into Checkout Session metadata at checkout time (same mechanism as `productId`/`categorySlug`/`productSlug` today), so the webhook can link the resulting order.
 - New authenticated route (e.g. `/account/orders`) showing a customer's own order history.
 - **Important pre-existing gap to fix as part of this**: `Orders.access.read` currently allows *any* logged-in user to read *any* order (`Boolean(user)`) — that was fine when only admin staff could log in, but the moment `Customers` (#9) exists, this must be scoped so a customer can only ever read their own orders.
-- **Not started.** Depends on #9.
+- **Done** (branch `feature/auth`, not yet merged): `customer` relation on `Orders`; `/api/checkout` stamps `customerId` into session metadata when logged in; webhook links the resulting order; `Orders.access` scoped (admins full access, customers only `{ customer: { equals: user.id } }`, guest orders admin-only); `/account` shows a 3-order preview with "View all", full history at `/account/orders`. Verified: cross-customer reads return zero docs / 403 on write.
 
 ## 12. Legal pages (scaffolded, not real legal text)
 - Privacy Policy, Terms of Service, Returns/Refund Policy, and a cookie notice if analytics/tracking is ever added.

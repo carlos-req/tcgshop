@@ -1,5 +1,7 @@
 import type { CollectionConfig } from "payload";
 
+import { isAdminUser } from "@/lib/access";
+
 export const Orders: CollectionConfig = {
   slug: "orders",
   admin: {
@@ -14,10 +16,17 @@ export const Orders: CollectionConfig = {
     ],
   },
   access: {
-    read: ({ req: { user } }) => Boolean(user),
+    read: ({ req: { user } }) => {
+      if (isAdminUser(user)) return true;
+      if (!user) return false;
+      // A customer can only ever see their own orders — guest checkouts
+      // (no linked customer) are admin-only, since there's no account to
+      // scope them to.
+      return { customer: { equals: user.id } };
+    },
     create: () => false,
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => Boolean(user),
+    update: ({ req: { user } }) => isAdminUser(user),
+    delete: ({ req: { user } }) => isAdminUser(user),
   },
   fields: [
     {
@@ -38,6 +47,16 @@ export const Orders: CollectionConfig = {
       relationTo: "products",
       required: true,
       index: true,
+    },
+    {
+      name: "customer",
+      type: "relationship",
+      relationTo: "customers",
+      index: true,
+      admin: {
+        description:
+          "Linked when the shopper was logged in at checkout. Empty for guest checkouts.",
+      },
     },
     {
       name: "quantity",
