@@ -24,9 +24,24 @@ export async function generateMetadata({
 
   if (!product) return {};
 
+  const title = `${product.name} | X-Spelled`;
+
   return {
-    title: `${product.name} | X-Spelled`,
+    title,
     description: product.description,
+    openGraph: {
+      title,
+      description: product.description,
+      images: product.image
+        ? [{ url: product.image, alt: product.alt }]
+        : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: product.description,
+      images: product.image ? [product.image] : undefined,
+    },
   };
 }
 

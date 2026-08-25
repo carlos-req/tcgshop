@@ -21,9 +21,17 @@ export async function generateMetadata({
 
   if (!category) return {};
 
+  const title = `${category.name} | X-Spelled`;
+
   return {
-    title: `${category.name} | X-Spelled`,
+    title,
     description: category.description,
+    openGraph: { title, description: category.description },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: category.description,
+    },
   };
 }
 

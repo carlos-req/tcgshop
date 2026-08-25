@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Minus, Plus, ShoppingBag, X } from "lucide-react";
@@ -12,6 +12,8 @@ export function CartDrawer() {
     useCart();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -21,6 +23,15 @@ export function CartDrawer() {
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, closeCart]);
+
+  useEffect(() => {
+    if (isOpen) {
+      previouslyFocusedRef.current = document.activeElement as HTMLElement;
+      closeButtonRef.current?.focus();
+    } else {
+      previouslyFocusedRef.current?.focus();
+    }
+  }, [isOpen]);
 
   async function handleCheckout() {
     setError(null);
@@ -76,6 +87,7 @@ export function CartDrawer() {
             Your cart
           </h2>
           <button
+            ref={closeButtonRef}
             type="button"
             onClick={closeCart}
             aria-label="Close cart"

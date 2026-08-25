@@ -48,11 +48,10 @@ Decisions locked in: Supabase for Postgres hosting only (not auth); a separate `
 - **Also added**: `COMPANY_NAME` constant in `src/lib/site.ts`, used only in the legal-page copy (by design — header/footer/page `<title>`s keep the literal "X-Spelled" brand name, which is a separate concern from the legal entity name referenced in policy text).
 
 ## 13. Pre-launch checklist
-- **Order confirmation email**: no email adapter is configured yet (`No email adapter provided` warning on startup) — the checkout success banner already claims "you'll receive a confirmation email shortly," which isn't true today. Needs a real adapter (e.g. Resend, Postmark) in `payload.config.ts`.
-- Clear separation of test vs. live Stripe keys per environment.
-- Production Stripe webhook endpoint registered in the Dashboard (this is #5a above, carried forward).
-- SEO basics: `robots.txt`, sitemap, Open Graph images (per-page metadata already exists via `generateMetadata`).
-- Error/monitoring for `/api/checkout` and the webhook route beyond console logs.
-- Confirm Supabase's backup/PITR settings once #8 is done.
-- Accessibility pass (keyboard nav, focus states, alt-text spot check) — natural to fold into #7's design pass.
-- **Not started.**
+- **Order confirmation email**: no email adapter is configured yet (`No email adapter provided` warning on startup) — the checkout success banner already claims "you'll receive a confirmation email shortly," which isn't true today. Needs a real adapter (e.g. Resend, Postmark) in `payload.config.ts`. **Not started.**
+- Clear separation of test vs. live Stripe keys per environment. **Not started.**
+- Production Stripe webhook endpoint registered in the Dashboard (this is #5a above, carried forward). **Not started.**
+- ~~SEO basics: `robots.txt`, sitemap, Open Graph images (per-page metadata already exists via `generateMetadata`).~~ **Done** (branch `feature/auth`, not yet merged): `src/app/robots.ts` (disallows `/admin`, `/api`, `/account`, `/checkout`), `src/app/sitemap.ts` (home, legal pages, categories, products — pulled live from the CMS), `metadataBase` + `openGraph`/`twitter` defaults on the root layout, a generated default OG/Twitter card image (`next/og`, no static asset needed), and real per-product OG images using the product's own photo. Needs `NEXT_PUBLIC_SITE_URL` set in the deployed environment once a production domain exists (falls back to `localhost:3000` for dev) — see `src/lib/site.ts`.
+- Error/monitoring for `/api/checkout` and the webhook route beyond console logs. **Not started.**
+- Confirm Supabase's backup/PITR settings once #8 is done. **Not started.**
+- ~~Accessibility pass (keyboard nav, focus states, alt-text spot check) — natural to fold into #7's design pass.~~ **Done** (branch `feature/auth`, not yet merged): alt-text audit found no gaps (decorative images already `alt=""`/`aria-hidden`, content images already descriptive). Fixed two real gaps found during the pass: (1) category nav links were completely unreachable below the `lg` breakpoint with no fallback — added a mobile menu (`Header.tsx`) with proper `aria-expanded`/`aria-controls`, Escape-to-close, and closes on navigation; (2) `CartDrawer` is a custom modal that wasn't trapping focus — background content is now `inert` while it's open (`AppShell.tsx`), focus moves to the dialog on open and returns to the trigger on close. Not verified in an actual browser this session (no browser extension connected) — worth a manual keyboard/screen-reader pass before launch.
