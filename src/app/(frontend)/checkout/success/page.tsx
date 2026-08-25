@@ -3,9 +3,10 @@ import type { Metadata } from "next";
 import { ShieldCheck } from "lucide-react";
 
 import { ClearCartOnMount } from "@/components/ClearCartOnMount";
+import { COMPANY_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Order confirmed | X-Spelled",
+  title: `Order confirmed | ${COMPANY_NAME}`,
 };
 
 export default function CheckoutSuccessPage() {

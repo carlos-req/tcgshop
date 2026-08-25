@@ -1,15 +1,22 @@
 import { MessageCircle, Newspaper, ShieldCheck } from "lucide-react";
 import Link from "next/link";
+import { COMPANY_NAME } from "@/lib/site";
 
 const supportLinks = [
   { label: "Pre-order Policy & Guarantees", href: "/support/pre-order-policy" },
   { label: "Shipping & Tracking Info", href: "/support/shipping" },
-  { label: "Returns & Authenticity", href: "/support/returns" },
+  { label: "Returns & Authenticity", href: "/legal/returns-policy" },
 ];
 
 const communityLinks = [
   { label: "Discord Server", href: "https://discord.gg", icon: MessageCircle },
   { label: "Collector's Blog", href: "/blog", icon: Newspaper },
+];
+
+const legalLinks = [
+  { label: "Privacy Policy", href: "/legal/privacy-policy" },
+  { label: "Terms of Service", href: "/legal/terms-of-service" },
+  { label: "Returns Policy", href: "/legal/returns-policy" },
 ];
 
 export function Footer() {
@@ -19,7 +26,7 @@ export function Footer() {
         <div className="grid gap-10 md:grid-cols-3">
           <div>
             <p className="font-display text-lg font-semibold text-on-surface">
-              X-Spelled
+              {COMPANY_NAME}
             </p>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-on-surface-variant">
               Sealed booster boxes and packs, checked before they ship.
@@ -61,9 +68,23 @@ export function Footer() {
         </div>
 
         <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-white/5 pt-6">
-          <p className="text-sm text-outline">
-            © 2026 X-Spelled. All rights reserved.
-          </p>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <p className="text-sm text-outline">
+              © 2026 {COMPANY_NAME}. All rights reserved.
+            </p>
+            <ul className="flex flex-wrap items-center gap-x-4 gap-y-2">
+              {legalLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-outline transition-colors hover:text-on-surface-variant"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
           <div className="flex items-center gap-3 text-outline">
             <ShieldCheck className="size-5" aria-hidden="true" />
             <span className="text-sm">Verified secure</span>

@@ -4,6 +4,7 @@ import { CategoryStrip } from "@/components/CategoryStrip";
 import { ProductCardSection } from "@/components/ProductCardSection";
 import { getCategoryBySlug } from "@/data/categories";
 import { getProductsByCategory } from "@/data/products";
+import { COMPANY_NAME } from "@/lib/site";
 
 // TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
 // See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
@@ -22,7 +23,7 @@ export async function generateMetadata({
   if (!category) return {};
 
   return {
-    title: `${category.name} | X-Spelled`,
+    title: `${category.name} | ${COMPANY_NAME}`,
     description: category.description,
   };
 }

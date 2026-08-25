@@ -4,11 +4,12 @@ import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 
 import { getCurrentCustomer } from "@/lib/auth";
+import { COMPANY_NAME } from "@/lib/site";
 import { loginAction } from "../(account)/actions";
 import { AuthField, AuthForm } from "../(account)/AuthForm";
 
 export const metadata: Metadata = {
-  title: "Log in | X-Spelled",
+  title: `Log in | ${COMPANY_NAME}`,
 };
 
 export default function LoginPage() {

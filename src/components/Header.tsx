@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useState, type ChangeEvent, type SubmitEvent } from "react";
 import { useCart } from "@/lib/cart-context";
+import { COMPANY_NAME } from "@/lib/site";
 
 const navLinks: Array<{ label: string; href: string }> = [
   { label: "Palworld", href: "/palworld" },
@@ -37,7 +38,7 @@ export function Header() {
           href="/"
           className="font-display text-on-surface shrink-0 text-lg font-semibold"
         >
-          X-Spelled
+          {COMPANY_NAME}
         </Link>
 
         <nav className="hidden items-center gap-6 lg:flex">
