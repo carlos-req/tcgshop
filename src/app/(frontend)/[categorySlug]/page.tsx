@@ -1,10 +1,9 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { HeroSection } from "@/components/HeroSection";
+import { CategoryStrip } from "@/components/CategoryStrip";
 import { ProductCardSection } from "@/components/ProductCardSection";
-import { TrustBar } from "@/components/TrustBar";
 import { getCategoryBySlug } from "@/data/categories";
-import { getFeaturedProduct, getProductsByCategory } from "@/data/products";
+import { getProductsByCategory } from "@/data/products";
 
 // TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
 // See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
@@ -34,20 +33,16 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   if (!category) notFound();
 
-  const [products, featuredProduct] = await Promise.all([
-    getProductsByCategory(categorySlug),
-    getFeaturedProduct(categorySlug),
-  ]);
+  const products = await getProductsByCategory(categorySlug);
 
   return (
     <>
-      <HeroSection
-        categorySlug={categorySlug}
-        categoryName={category.name}
-        featuredProduct={featuredProduct}
+      <CategoryStrip
+        name={category.name}
+        description={category.description}
+        productCount={products.length}
       />
-      <TrustBar />
-      <ProductCardSection categoryName={category.name} products={products} />
+      <ProductCardSection products={products} />
     </>
   );
 }

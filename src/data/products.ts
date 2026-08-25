@@ -7,6 +7,10 @@ interface PayloadMediaDoc {
   alt?: string | null;
 }
 
+interface PayloadCategoryRef {
+  slug?: string;
+}
+
 interface PayloadProductDoc {
   id: string | number;
   name: string;
@@ -19,6 +23,7 @@ interface PayloadProductDoc {
   status: StockStatus;
   images?: (PayloadMediaDoc | string | number)[] | null;
   stripePriceId?: string | null;
+  category?: PayloadCategoryRef | string | number | null;
 }
 
 async function findProductDoc(
@@ -89,28 +94,40 @@ export async function getProductsByCategory(
   );
 }
 
-export async function getFeaturedProduct(
-  categorySlug: string,
-): Promise<Product | null> {
-  const category = await getCategoryBySlug(categorySlug);
-  if (!category) return null;
-
+export async function getRecentProducts(limit = 8): Promise<Product[]> {
   const payload = await getPayloadClient();
 
   const result = await payload.find({
     collection: "products",
-    where: {
-      and: [
-        { category: { equals: category.id } },
-        { featured: { equals: true } },
-      ],
-    },
+    sort: "-createdAt",
+    depth: 1,
+    limit,
+  });
+
+  return (result.docs as unknown as PayloadProductDoc[]).flatMap((doc) => {
+    const categorySlug =
+      typeof doc.category === "object" ? doc.category?.slug : undefined;
+    return categorySlug ? [mapToProduct(doc, categorySlug)] : [];
+  });
+}
+
+export async function getGlobalFeaturedProduct(): Promise<Product | null> {
+  const payload = await getPayloadClient();
+
+  const result = await payload.find({
+    collection: "products",
+    where: { featured: { equals: true } },
+    sort: "-createdAt",
     depth: 1,
     limit: 1,
   });
 
   const doc = result.docs[0] as PayloadProductDoc | undefined;
-  return doc ? mapToProduct(doc, categorySlug) : null;
+  if (!doc) return null;
+
+  const categorySlug =
+    typeof doc.category === "object" ? doc.category?.slug : undefined;
+  return categorySlug ? mapToProduct(doc, categorySlug) : null;
 }
 
 export async function getProductBySlug(

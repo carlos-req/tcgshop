@@ -1,32 +1,25 @@
-import { HeroSection } from "@/components/HeroSection";
-import { ProductCardSection } from "@/components/ProductCardSection";
+import { HomeHero } from "@/components/HomeHero";
+import { ShopByGame } from "@/components/ShopByGame";
+import { NewArrivals } from "@/components/NewArrivals";
 import { TrustBar } from "@/components/TrustBar";
-import { getCategoryBySlug } from "@/data/categories";
-import { getFeaturedProduct, getProductsByCategory } from "@/data/products";
+import { getAllCategories } from "@/data/categories";
+import { getGlobalFeaturedProduct, getRecentProducts } from "@/data/products";
 
 export const instant = false;
 
-const HOME_CATEGORY_SLUG = "palworld";
-
 export default async function Home() {
-  const [category, products, featuredProduct] = await Promise.all([
-    getCategoryBySlug(HOME_CATEGORY_SLUG),
-    getProductsByCategory(HOME_CATEGORY_SLUG),
-    getFeaturedProduct(HOME_CATEGORY_SLUG),
+  const [categories, recentProducts, featuredProduct] = await Promise.all([
+    getAllCategories(),
+    getRecentProducts(),
+    getGlobalFeaturedProduct(),
   ]);
 
   return (
     <>
-      <HeroSection
-        categorySlug={HOME_CATEGORY_SLUG}
-        categoryName={category?.name ?? "Featured"}
-        featuredProduct={featuredProduct}
-      />
+      <HomeHero featuredProduct={featuredProduct} />
       <TrustBar />
-      <ProductCardSection
-        categoryName={category?.name ?? "Featured"}
-        products={products}
-      />
+      <ShopByGame categories={categories} />
+      <NewArrivals products={recentProducts} />
     </>
   );
 }
