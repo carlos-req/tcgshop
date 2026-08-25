@@ -1,92 +1,70 @@
 ---
-name: Prism TCG
+name: X-Spelled
 colors:
-  surface: "#111319"
-  surface-dim: "#111319"
-  surface-bright: "#373940"
-  surface-container-lowest: "#0c0e14"
-  surface-container-low: "#191b22"
-  surface-container: "#1e1f26"
-  surface-container-high: "#282a30"
-  surface-container-highest: "#33343b"
-  on-surface: "#e2e2eb"
-  on-surface-variant: "#b9caca"
-  inverse-surface: "#e2e2eb"
-  inverse-on-surface: "#2e3037"
-  outline: "#849495"
-  outline-variant: "#3a494a"
-  surface-tint: "#00dce5"
-  primary: "#e9feff"
-  on-primary: "#003739"
-  primary-container: "#00f5ff"
-  on-primary-container: "#006c71"
-  inverse-primary: "#00696e"
-  secondary: "#ebb2ff"
-  on-secondary: "#520072"
-  secondary-container: "#b600f8"
-  on-secondary-container: "#fff6fc"
-  tertiary: "#fff9f0"
-  on-tertiary: "#3a3000"
-  tertiary-container: "#ffdb40"
-  on-tertiary-container: "#736000"
-  error: "#ffb4ab"
-  on-error: "#690005"
-  error-container: "#93000a"
-  on-error-container: "#ffdad6"
-  primary-fixed: "#63f7ff"
-  primary-fixed-dim: "#00dce5"
-  on-primary-fixed: "#002021"
-  on-primary-fixed-variant: "#004f53"
-  secondary-fixed: "#f8d8ff"
-  secondary-fixed-dim: "#ebb2ff"
-  on-secondary-fixed: "#320047"
-  on-secondary-fixed-variant: "#74009f"
-  tertiary-fixed: "#ffe16d"
-  tertiary-fixed-dim: "#e9c400"
-  on-tertiary-fixed: "#221b00"
-  on-tertiary-fixed-variant: "#544600"
-  background: "#111319"
-  on-background: "#e2e2eb"
-  surface-variant: "#33343b"
+  surface: "#15130f"
+  surface-dim: "#100e0b"
+  surface-bright: "#3a3426"
+  surface-container-lowest: "#0d0b08"
+  surface-container-low: "#1c1812"
+  surface-container: "#221d16"
+  surface-container-high: "#2c251c"
+  surface-container-highest: "#362d22"
+  on-surface: "#ede6d6"
+  on-surface-variant: "#b8ad97"
+  outline: "#6e6455"
+  outline-variant: "#3d362a"
+  primary: "#c89b3c"
+  primary-dim: "#a67c2e"
+  on-primary: "#1c1409"
+  on-primary-container: "#7a5a1e"
+  secondary: "#b23a2e"
+  secondary-light: "#e2897a"
+  on-secondary: "#fbede9"
+  tertiary: "#3e6b54"
+  tertiary-light: "#eaf3ec"
+  on-tertiary: "#eaf3ec"
+  error: "#d64545"
+  background: "#15130f"
+  on-background: "#ede6d6"
 typography:
   display-lg:
-    fontFamily: Sora
-    fontSize: 48px
-    fontWeight: "800"
-    lineHeight: "1.1"
-    letterSpacing: -0.02em
+    fontFamily: Fraunces
+    fontSize: 52px
+    fontWeight: "600"
+    lineHeight: "1.05"
+    letterSpacing: -0.01em
   display-lg-mobile:
-    fontFamily: Sora
-    fontSize: 32px
-    fontWeight: "800"
-    lineHeight: "1.2"
+    fontFamily: Fraunces
+    fontSize: 36px
+    fontWeight: "600"
+    lineHeight: "1.15"
   headline-md:
-    fontFamily: Sora
-    fontSize: 24px
-    fontWeight: "700"
-    lineHeight: "1.3"
+    fontFamily: Fraunces
+    fontSize: 26px
+    fontWeight: "600"
+    lineHeight: "1.25"
   body-lg:
-    fontFamily: Hanken Grotesk
+    fontFamily: Source Sans 3
     fontSize: 18px
     fontWeight: "400"
     lineHeight: "1.6"
   body-md:
-    fontFamily: Hanken Grotesk
+    fontFamily: Source Sans 3
     fontSize: 16px
     fontWeight: "400"
     lineHeight: "1.6"
   label-mono:
-    fontFamily: JetBrains Mono
+    fontFamily: IBM Plex Mono
     fontSize: 12px
     fontWeight: "500"
     lineHeight: "1.0"
     letterSpacing: 0.05em
 rounded:
   sm: 0.25rem
-  DEFAULT: 0.5rem
-  md: 0.75rem
-  lg: 1rem
-  xl: 1.5rem
+  DEFAULT: 0.625rem
+  md: 0.625rem
+  lg: 0.875rem
+  xl: 1.25rem
   full: 9999px
 spacing:
   grid-margin: 2rem
@@ -97,70 +75,40 @@ spacing:
 
 ## Brand & Style
 
-This design system is built for a high-fidelity Trading Card Game (TCG) marketplace. It leans into a "Gamer-Chic" aesthetic—a sophisticated evolution of typical gaming interfaces that prioritizes clarity and premium value over clutter.
+X-Spelled sells sealed, authenticated trading card game product — booster boxes and packs for Magic: The Gathering, Palworld TCG, and future lines. The core emotional beat isn't "gamer dashboard," it's the **pack-opening moment**: foil, holographic rarity, the ritual of pulling something rare. The design leans into that directly rather than into generic dark-mode SaaS aesthetics.
 
-The style is **Glassmorphic-Modern**. It utilizes deep, layered dark surfaces to provide a high-contrast backdrop for vibrant card art. To evoke the feeling of "pulling a rare card," the UI incorporates subtle luminosity, glowing accents, and translucent materials. The emotional response should be one of "exclusive discovery"—trustworthy enough for high-value transactions, yet energetic enough to match the excitement of a new set release.
+The style is **Warm Ink & Foil**. A deep, warm near-black (not a cool navy-black) forms the base — like the inside of a sealed booster box — against which muted antique-gold and brick-red accents read as tactile, physical materials rather than glowing UI chrome. Backdrop-blur "glassmorphism" is deliberately avoided; surfaces are solid and card-stock-like, not translucent. The one moment of digital flourish — a mouse-tracked holographic sheen — is reserved for a single signature element (the homepage hero's featured pack), not scattered across the UI.
 
 ## Colors
 
-The palette is anchored in a deep "Obsidian" neutral to ensure card illustrations pop.
-
-- **Primary (Holo-Teal):** Used for primary actions, success states, and rare-tier indicators. It provides a high-energy, digital-first feel.
-- **Secondary (Electric Purple):** Used for secondary actions, "Epic" rarity tiers, and deep-layer accents.
-- **Tertiary (Neon Gold):** Reserved for "Legendary" status, pre-order callouts, and premium highlights.
-- **Backgrounds:** Use a scale of deep grays starting from `#0F1117` (Base) to `#1E2330` (Surface).
-
-Apply subtle glows (box-shadows) using the primary and secondary colors for "Featured" or "Hot" items to mimic the reflective nature of holographic cards.
+- **Primary (Foil Gold):** primary actions, "in stock" and rare-tier indicators. Muted antique brass rather than neon — reads as premium, not gamer-neon.
+- **Secondary (Ember):** preorder/limited-availability callouts, sale tags — a deep brick red, like a wax seal.
+- **Tertiary (Pine):** success/availability states.
+- **Holo (signature only, not a flat token):** an animated teal→violet→gold sheen used exclusively on the homepage hero's featured-pack element. Never used as a static color anywhere else.
+- **Backgrounds:** warm near-black scale from `#0d0b08` (lowest) to `#362d22` (highest container), never cool blue-black.
 
 ## Typography
 
-The typography system balances aggressive display presence with utilitarian data density.
+- **Display (Fraunces):** headlines, product names, prices. A real serif with optical-size character — deliberately not a geometric sans, which is the default for this kind of product right now. Used with italics on the brand wordmark and hero headline for a handwritten, "rare pull" warmth.
+- **Body (Source Sans 3):** descriptions, shipping/condition copy, everything read at length.
+- **Data/Labels (IBM Plex Mono):** SKUs, set/category slugs, prices in dense contexts — a "database" feel for collectors who care about specifics.
 
-- **Headlines:** Sora provides a geometric, bold, and tech-forward feel. Use it for page titles, card names, and price points.
-- **Body:** Hanken Grotesk offers exceptional readability for card descriptions, shipping details, and market history.
-- **Data/Labels:** JetBrains Mono is utilized for SKU numbers, set codes, and technical card specs (HP, Attack, Year) to provide a "database" aesthetic that collectors appreciate.
+## Layout — homepage vs. category page
 
-Keep line heights tight for headlines to maintain a compact, punchy look.
+These two page types have different jobs and must not share one hero:
 
-## Layout & Spacing
+- **Homepage** sells the *store*: a full-width brand hero (headline + the signature holo-tilt pack), a trust strip, "Shop by game" as large editorial category tiles (not a product grid), and a "New arrivals" row.
+- **Category page** sells *browsing speed*: a slim one-line strip (name + product count, no cinematic hero), a sticky filter/sort bar, and a dense product grid.
+- **Product page**: image, name, price, buy action, plus a short authenticity/condition note — the collector-trust equivalent of a return policy blurb.
 
-The design system employs a **12-column fluid grid** for desktop and a **4-column grid** for mobile.
+## Shape & elevation
 
-- **Density:** Use a 4px baseline grid. TCG users prefer high information density to compare prices.
-- **Margins:** Desktop uses a generous 32px (2rem) margin to allow the "glow" of glassmorphic cards to bleed without feeling cramped.
-- **Card Grids:** Use an aspect-ratio aware grid (typically 2.5:3.5) for card listings. Implement a "masonry-lite" approach for news and articles.
-
-Adaptive logic: On mobile, the card grid should collapse into a 2-column view to preserve card art legibility.
-
-## Elevation & Depth
-
-Hierarchy is established through **Backdrop Blurs** and **Luminous Borders** rather than traditional shadows.
-
-- **Level 0 (Base):** Deep `#0F1117`.
-- **Level 1 (Card/Surface):** Semi-transparent obsidian (`rgba(30, 35, 48, 0.7)`) with a 12px backdrop blur.
-- **Level 2 (Modals/Popovers):** Higher transparency with a subtle 1px inner border in a low-opacity primary color.
-- **The "Glow":** Featured items use a `0px 0px 15px` outer glow in the primary or tertiary color to indicate "In-Stock" or "Legendary" status.
-
-## Shapes
-
-The shape language reflects the physical nature of cards.
-
-- **UI Elements:** Buttons and inputs use a standard `0.5rem` (8px) radius.
-- **Cards:** Product cards must use a slightly larger radius (`1rem`) to mirror the die-cut corners of physical trading cards.
-- **Interactive States:** On hover, card elements should slightly scale up (1.02x) and increase the intensity of their border glow.
+- Cards use a `0.625rem`–`0.875rem` radius — enough to feel considered, not the near-full-round "app icon" look.
+- Elevation comes from a 1px `outline-variant` border and a soft drop shadow on hover (`tcg-card-hover`), not glow/blur effects.
+- The signature `foil-tilt` + `holo-sheen` treatment (mouse-tracked 3D tilt + animated holographic gradient sweep) is the one place motion is spent boldly — everywhere else stays calm, respects `prefers-reduced-motion`, and uses restrained hover transitions only.
 
 ## Components
 
-- **Buttons:**
-  - _Primary:_ Solid primary teal with black text for high visibility.
-  - _Preorder:_ Secondary purple with a "pulsing" glow animation on the border.
-- **Input Fields:**
-  - Dark-wash background, no fill. 1px stroke that turns Primary on focus. Use JetBrains Mono for placeholder text.
-- **Rarity Chips:**
-  - Small, pill-shaped labels with a glassmorphic background and a color-coded dot (Common: White, Rare: Teal, Mythic: Gold).
-- **Price Ticker:**
-  - A compact list item using Mono fonts to show market trend (Up/Down arrows in Green/Red).
-- **Glass Card:**
-  - The core component. A container with a `1px` white (opacity 0.1) top-border to catch the "light," creating a 3D glass effect.
-- **Notification Toast:**
-  - Anchored top-right, featuring a heavy blur and high-contrast primary accent line on the left.
+- **Buttons:** primary is solid foil-gold with dark ink text; preorder is ember with a slow pulse (no neon glow); disabled/out-of-stock is a flat muted surface tone.
+- **Rarity/status:** communicated through color (gold = in stock, ember = preorder, muted = out of stock) rather than decorative badges.
+- **Cards:** solid `surface-container` background, 1px outline border, lift + border-color shift on hover — no backdrop blur.

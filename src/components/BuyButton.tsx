@@ -9,6 +9,7 @@ interface BuyButtonProps {
   label: string;
   className: string;
   disabled: boolean;
+  showIcon?: boolean;
 }
 
 export function BuyButton({
@@ -17,6 +18,7 @@ export function BuyButton({
   label,
   className,
   disabled,
+  showIcon = true,
 }: BuyButtonProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -53,12 +55,16 @@ export function BuyButton({
         type="button"
         onClick={handleClick}
         disabled={disabled || loading}
-        className={`inline-flex items-center gap-2 rounded-lg px-8 py-3.5 font-display text-sm font-bold uppercase tracking-wide transition-all ${className}`}
+        className={className}
       >
-        <ShoppingCart className="size-4" />
+        {showIcon && <ShoppingCart className="size-4" aria-hidden="true" />}
         {loading ? "Redirecting…" : label}
       </button>
-      {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
+      {error && (
+        <p className="mt-2 text-sm text-red-500" aria-live="polite">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

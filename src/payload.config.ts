@@ -14,6 +14,18 @@ import { Users } from "./collections/Users";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
+const connectionString =
+  process.env.DATABASE_URL ||
+  "postgres://postgres:postgres@127.0.0.1:5432/tcgshop";
+
+// Hosted Postgres (Supabase, etc.) requires SSL; a local Postgres (Docker or
+// otherwise) doesn't support it, so key off the hostname rather than just
+// "is DATABASE_URL set" — that way pointing DATABASE_URL back at localhost
+// for local dev doesn't break the connection.
+const isLocalDatabase = /^postgres(?:ql)?:\/\/[^@]*@(localhost|127\.0\.0\.1)/.test(
+  connectionString,
+);
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -29,9 +41,8 @@ export default buildConfig({
   },
   db: postgresAdapter({
     pool: {
-      connectionString:
-        process.env.DATABASE_URL ||
-        "postgres://postgres:postgres@127.0.0.1:5432/tcgshop",
+      connectionString,
+      ssl: isLocalDatabase ? undefined : { rejectUnauthorized: false },
     },
   }),
   sharp,

@@ -83,27 +83,27 @@ stripe listen --forward-to localhost:3000/api/stripe/webhook
 
 ## Environment variables
 
-| Variable                | Used by                     | Notes                                                              |
-| ------------------------ | ---------------------------- | -------------------------------------------------------------------- |
-| `PAYLOAD_SECRET`         | Payload                     | Any long random string for local dev                                |
-| `DATABASE_URL`           | Payload's Postgres adapter  | Falls back to the local Docker Postgres if unset — set a real value for anything beyond local dev |
-| `DB_PASSWORD`            | `docker-compose.yml`        | Password for the local Postgres container                          |
-| `STRIPE_SECRET_KEY`      | `/api/checkout`             | Stripe secret key (test or live)                                    |
-| `STRIPE_WEBHOOK_SECRET`  | `/api/stripe/webhook`       | Signing secret from `stripe listen` (dev) or a Stripe Dashboard webhook endpoint (production) |
+| Variable                | Used by                    | Notes                                                                                             |
+| ----------------------- | -------------------------- | ------------------------------------------------------------------------------------------------- |
+| `PAYLOAD_SECRET`        | Payload                    | Any long random string for local dev                                                              |
+| `DATABASE_URL`          | Payload's Postgres adapter | Falls back to the local Docker Postgres if unset — set a real value for anything beyond local dev |
+| `DB_PASSWORD`           | `docker-compose.yml`       | Password for the local Postgres container                                                         |
+| `STRIPE_SECRET_KEY`     | `/api/checkout`            | Stripe secret key (test or live)                                                                  |
+| `STRIPE_WEBHOOK_SECRET` | `/api/stripe/webhook`      | Signing secret from `stripe listen` (dev) or a Stripe Dashboard webhook endpoint (production)     |
 
 ## Scripts
 
-| Script                    | Purpose                                          |
-| -------------------------- | ------------------------------------------------- |
-| `npm run dev`              | Start the dev server                              |
-| `npm run build`            | Production build                                  |
-| `npm run start`            | Run a production build                            |
-| `npm run lint`             | ESLint                                            |
-| `npm run format`           | Format with Prettier                              |
-| `npm run format:check`     | Check formatting without writing                   |
-| `npm run payload`          | Payload CLI passthrough                            |
-| `npm run generate:types`   | Regenerate `src/payload-types.ts`                  |
-| `npm run generate:importmap` | Regenerate Payload's admin import map           |
+| Script                       | Purpose                               |
+| ---------------------------- | ------------------------------------- |
+| `npm run dev`                | Start the dev server                  |
+| `npm run build`              | Production build                      |
+| `npm run start`              | Run a production build                |
+| `npm run lint`               | ESLint                                |
+| `npm run format`             | Format with Prettier                  |
+| `npm run format:check`       | Check formatting without writing      |
+| `npm run payload`            | Payload CLI passthrough               |
+| `npm run generate:types`     | Regenerate `src/payload-types.ts`     |
+| `npm run generate:importmap` | Regenerate Payload's admin import map |
 
 ## Project structure
 

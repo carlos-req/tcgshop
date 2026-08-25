@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ArrowLeft, Truck } from "lucide-react";
+import { ArrowLeft, ShieldCheck, Truck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { BuyButton } from "@/components/BuyButton";
@@ -65,12 +65,12 @@ export default async function ProductPage({
           href={`/${category.slug}`}
           className="inline-flex items-center gap-2 text-sm text-on-surface-variant transition-colors hover:text-on-surface"
         >
-          <ArrowLeft className="size-4" />
+          <ArrowLeft className="size-4" aria-hidden="true" />
           Back to {category.name}
         </Link>
 
         <div className="mt-8 grid gap-12 lg:grid-cols-2">
-          <div className="relative aspect-square overflow-hidden rounded-xl glass-card">
+          <div className="relative aspect-square overflow-hidden rounded-xl tcg-card">
             {product.image && (
               <Image
                 src={product.image}
@@ -83,7 +83,7 @@ export default async function ProductPage({
           </div>
 
           <div>
-            <span className="text-label-mono text-primary-dim">
+            <span className="text-eyebrow text-primary-dim">
               {category.name}
             </span>
             <h1 className="mt-2 text-display-lg text-on-surface">
@@ -115,13 +115,13 @@ export default async function ProductPage({
                 categorySlug={category.slug}
                 productSlug={product.slug}
                 label={button.label}
-                className={button.className}
+                className={`inline-flex items-center gap-2 rounded-lg px-8 py-3.5 font-display text-sm font-bold uppercase tracking-wide transition-colors ${button.className}`}
                 disabled={button.disabled}
               />
             </div>
 
             <div className="mt-8 flex items-center gap-3 rounded-lg border border-outline-variant/30 bg-surface-container-low p-4">
-              <Truck className="size-5 text-primary-dim" />
+              <Truck className="size-5 text-primary-dim" aria-hidden="true" />
               <div>
                 <p className="text-sm font-medium text-on-surface">
                   {product.status === "in_stock"
@@ -132,6 +132,17 @@ export default async function ProductPage({
                   Ships after order confirmation
                 </p>
               </div>
+            </div>
+
+            <div className="mt-3 flex items-center gap-3 rounded-lg border border-outline-variant/30 bg-surface-container-low p-4">
+              <ShieldCheck
+                className="size-5 text-primary-dim"
+                aria-hidden="true"
+              />
+              <p className="text-sm text-on-surface-variant">
+                Factory-sealed and verified before it ships — never opened,
+                never resealed.
+              </p>
             </div>
           </div>
         </div>

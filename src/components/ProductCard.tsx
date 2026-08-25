@@ -2,6 +2,7 @@ import { memo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types/product";
+import { BuyButton } from "@/components/BuyButton";
 import { formatPrice, getButtonConfig } from "@/lib/product-display";
 
 interface ProductCardProps {
@@ -14,7 +15,7 @@ function ProductCardComponent({ product }: ProductCardProps) {
   const href = `/${product.category}/${product.slug}`;
 
   return (
-    <article className="glass-card glass-card-hover flex flex-col overflow-hidden rounded-lg">
+    <article className="tcg-card tcg-card-hover flex flex-col overflow-hidden rounded-xl">
       <Link
         href={href}
         className="relative block aspect-square bg-surface-container-low"
@@ -30,31 +31,32 @@ function ProductCardComponent({ product }: ProductCardProps) {
         )}
       </Link>
 
-      <div className="flex flex-1 flex-col p-4">
-        <div className="mb-2 flex flex-wrap items-baseline gap-2">
-          <span className="font-display text-lg font-bold text-primary-dim">
+      <div className="flex flex-col gap-1.5 p-2.5">
+        <Link href={href}>
+          <h3 className="line-clamp-1 text-sm leading-snug text-on-surface hover:text-primary-dim">
+            {product.name}
+          </h3>
+        </Link>
+
+        <div className="flex items-baseline gap-2">
+          <span className="font-display text-base font-semibold text-primary-dim">
             {formatPrice(product.price)}
           </span>
           {product.originalPrice && (
-            <span className="text-sm text-on-surface-variant line-through">
+            <span className="text-xs text-on-surface-variant line-through">
               {formatPrice(product.originalPrice)}
             </span>
           )}
         </div>
 
-        <Link href={href} className="line-clamp-3 flex-1">
-          <h3 className="text-sm leading-snug text-on-surface hover:text-primary-dim">
-            {product.name}
-          </h3>
-        </Link>
-
-        <button
-          type="button"
+        <BuyButton
+          categorySlug={product.category}
+          productSlug={product.slug}
+          label={button.label}
           disabled={button.disabled}
-          className={`mt-4 w-full rounded-lg px-4 py-2.5 font-display text-xs font-bold uppercase tracking-wide transition-all ${button.className}`}
-        >
-          {button.label}
-        </button>
+          showIcon={false}
+          className={`w-full rounded-full py-1.5 text-xs font-semibold transition-colors ${button.className}`}
+        />
       </div>
     </article>
   );

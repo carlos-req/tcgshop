@@ -1,86 +1,94 @@
 "use client";
 
-import { Bell, Search, User } from "lucide-react";
+import { Search, User } from "lucide-react";
 import Link from "next/link";
-import { useCallback, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useCallback, useState, type ChangeEvent, type SubmitEvent } from "react";
 
-const navLinks: Array<{ label: string; href: string; active?: boolean }> = [
-  { label: "Palworld", href: "/palworld", active: true },
+const navLinks: Array<{ label: string; href: string }> = [
+  { label: "Palworld", href: "/palworld" },
   { label: "Magic", href: "/magic" },
   { label: "Pokemon", href: "/pokemon" },
-  { label: "Sets", href: "/sets" },
 ];
 
 export function Header() {
+  const pathname = usePathname();
   const [searchQuery, setSearchQuery] = useState("");
   const handleSearchChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
+    (event: ChangeEvent<HTMLInputElement>) => {
       setSearchQuery(event.target.value);
     },
     [],
   );
 
+  // Site search isn't built yet — this form exists so Enter submits
+  // properly (rather than doing nothing) instead of a bare, unlabeled input.
+  // TODO: wire to a real /search route once that feature exists.
+  function handleSearchSubmit(event: SubmitEvent<HTMLFormElement>) {
+    event.preventDefault();
+  }
+
   return (
-    <header className="sticky top-0 z-50 border-b border-white/5 bg-surface-container-lowest/90 backdrop-blur-md">
-      <div className="mx-auto flex max-w-container items-center gap-6 px-8 py-4">
+    <header className="bg-surface-container-lowest/90 sticky top-0 z-50 border-b border-white/5 backdrop-blur-md">
+      <div className="max-w-container mx-auto flex items-center gap-6 px-8 py-4">
         <Link
           href="/"
-          className="shrink-0 font-display text-sm font-extrabold tracking-[0.15em] text-on-surface"
+          className="font-display text-on-surface shrink-0 text-lg font-semibold"
         >
-          X-SPELLED
+          X-Spelled
         </Link>
 
         <nav className="hidden items-center gap-6 lg:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              className={`text-sm font-medium transition-colors hover:text-primary-dim ${
-                link.active
-                  ? "border-b-2 border-primary-dim pb-0.5 text-on-surface"
-                  : "text-on-surface-variant"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            const active = pathname?.startsWith(link.href);
+            return (
+              <Link
+                key={link.label}
+                href={link.href}
+                className={`hover:text-primary-dim text-sm font-medium transition-colors ${
+                  active
+                    ? "border-primary-dim text-on-surface border-b-2 pb-0.5"
+                    : "text-on-surface-variant"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
 
-        <div className="relative mx-auto hidden max-w-md flex-1 md:block">
+        <form
+          role="search"
+          onSubmit={handleSearchSubmit}
+          className="relative mx-auto hidden max-w-md flex-1 md:block"
+        >
+          <label htmlFor="site-search" className="sr-only">
+            Search for cards or sets
+          </label>
           <Search
-            className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-outline"
-            aria-hidden
+            className="text-outline absolute top-1/2 left-4 size-4 -translate-y-1/2"
+            aria-hidden="true"
           />
           <input
+            id="site-search"
             type="search"
-            placeholder="Search for cards or sets..."
+            name="q"
+            autoComplete="off"
+            placeholder="Search for cards or sets…"
             value={searchQuery}
             onChange={handleSearchChange}
-            className="w-full rounded-full border border-outline-variant/60 bg-transparent py-2.5 pl-11 pr-4 font-mono text-sm text-on-surface placeholder:text-outline/70 focus:border-primary-dim focus:outline-none focus:ring-1 focus:ring-primary-dim/30"
+            className="border-outline-variant/60 text-on-surface placeholder:text-outline/70 focus-visible:border-primary-dim focus-visible:ring-primary-dim/30 w-full rounded-full border bg-transparent py-2.5 pr-4 pl-11 font-mono text-sm focus-visible:ring-1 focus-visible:outline-none"
           />
-        </div>
+        </form>
 
         <div className="ml-auto flex items-center gap-4">
           <button
             type="button"
-            className="rounded-full p-2 text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface"
-            aria-label="Notifications"
-          >
-            <Bell className="size-5" />
-          </button>
-          <button
-            type="button"
-            className="rounded-full p-2 text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface"
+            className="text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface cursor-pointer rounded-full p-2 transition-colors"
             aria-label="Account"
           >
             <User className="size-5" />
           </button>
-          <Link
-            href="/pre-orders"
-            className="hidden text-sm font-medium text-on-surface-variant transition-colors hover:text-on-surface sm:block"
-          >
-            My Pre-orders
-          </Link>
         </div>
       </div>
     </header>

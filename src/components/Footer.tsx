@@ -18,17 +18,16 @@ export function Footer() {
       <div className="mx-auto max-w-container px-8 py-12">
         <div className="grid gap-10 md:grid-cols-3">
           <div>
-            <p className="font-display text-sm font-extrabold tracking-[0.15em] text-on-surface">
-              X-SPELLED
+            <p className="font-display text-lg font-semibold text-on-surface">
+              X-Spelled
             </p>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-on-surface-variant">
-              The premier destination for high-end TCG collectors. Authentic
-              products, secure shipping.
+              Sealed booster boxes and packs, checked before they ship.
             </p>
           </div>
 
           <div>
-            <h4 className="text-label-mono text-on-surface">Support</h4>
+            <h4 className="text-sm font-semibold text-on-surface">Support</h4>
             <ul className="mt-4 space-y-2">
               {supportLinks.map((link) => (
                 <li key={link.href}>
@@ -44,7 +43,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-label-mono text-on-surface">Community</h4>
+            <h4 className="text-sm font-semibold text-on-surface">Community</h4>
             <ul className="mt-4 space-y-2">
               {communityLinks.map((link) => (
                 <li key={link.href}>
@@ -52,7 +51,7 @@ export function Footer() {
                     href={link.href}
                     className="inline-flex items-center gap-2 text-sm text-on-surface-variant transition-colors hover:text-on-surface"
                   >
-                    <link.icon className="size-4" />
+                    <link.icon className="size-4" aria-hidden="true" />
                     {link.label}
                   </Link>
                 </li>
@@ -62,14 +61,12 @@ export function Footer() {
         </div>
 
         <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-white/5 pt-6">
-          <p className="text-label-mono text-outline">
-            © 2026 X-SPELLED. ALL RIGHTS RESERVED.
+          <p className="text-sm text-outline">
+            © 2026 X-Spelled. All rights reserved.
           </p>
           <div className="flex items-center gap-3 text-outline">
-            <ShieldCheck className="size-5" aria-label="Verified secure" />
-            <div className="flex size-5 items-center justify-center rounded-full border border-outline-variant">
-              <span className="text-[10px] font-bold">✓</span>
-            </div>
+            <ShieldCheck className="size-5" aria-hidden="true" />
+            <span className="text-sm">Verified secure</span>
           </div>
         </div>
       </div>
