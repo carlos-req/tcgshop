@@ -6,6 +6,7 @@ import { fileURLToPath } from "url";
 import sharp from "sharp";
 
 import { Categories } from "./collections/Categories";
+import { Customers } from "./collections/Customers";
 import { Media } from "./collections/Media";
 import { Orders } from "./collections/Orders";
 import { Products } from "./collections/Products";
@@ -33,7 +34,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Categories, Products, Orders],
+  collections: [Users, Customers, Media, Categories, Products, Orders],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "dev-payload-secret-change-me",
   typescript: {

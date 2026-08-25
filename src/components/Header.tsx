@@ -82,13 +82,13 @@ export function Header() {
         </form>
 
         <div className="ml-auto flex items-center gap-4">
-          <button
-            type="button"
-            className="text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface cursor-pointer rounded-full p-2 transition-colors"
+          <Link
+            href="/account"
+            className="text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded-full p-2 transition-colors"
             aria-label="Account"
           >
             <User className="size-5" />
-          </button>
+          </Link>
         </div>
       </div>
     </header>

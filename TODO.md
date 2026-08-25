@@ -16,7 +16,7 @@ Decisions locked in: Supabase for Postgres hosting only (not auth); a separate `
 ## 7. Design pass — homepage/category hierarchy
 - Homepage and category pages currently share one generic `HeroSection` + `ProductCardSection` layout with no real distinction between "landing page" and "browse this category." Overall look reads as templated/AI-generated.
 - Use the `frontend-design` skill. In scope: homepage, category page, product detail page, shared header/footer/hero. Out of scope: Payload's admin UI.
-- **In progress** (current branch `design/homepage-category-hierarchy`, uncommitted) — new `HomeHero`, `CategoryStrip`, `ShopByGame`, `NewArrivals`, `HoloCard` components added; old `HeroSection`/root `layout.tsx` removed in favor of `(frontend)/layout.tsx`; `DESIGN-GUIDE.md` added. Not yet committed or verified end-to-end.
+- **Done** — merged via PR #7 (`design/homepage-category-hierarchy`, commit 8e18e99): `HomeHero`, `CategoryStrip`, `ShopByGame`, `NewArrivals`, `HoloCard` components, `(frontend)/layout.tsx`, gold/bold design pass, `DESIGN-GUIDE.md`.
 
 ## 8. Supabase Postgres migration
 - Provision a Supabase Postgres database, point `DATABASE_URL` at it, verify all collections (including the new `Customers` from #9) come up clean against it.
@@ -25,8 +25,9 @@ Decisions locked in: Supabase for Postgres hosting only (not auth); a separate `
 
 ## 9. `Customers` collection (separate from admin `Users`)
 - New Payload collection, `auth: true`, for shopper accounts — never the same collection/login as staff `Users`.
-- Customer-facing login/signup pages under `(frontend)`.
-- **Not started.** Depends on nothing else in this list, but #10/#11 depend on it.
+- Fields: first/last name, email (auth field), password (auth field), mobile phone, shipping address.
+- Customer-facing login/signup/logout pages under `(frontend)`.
+- **In progress** (current branch `feature/auth`).
 
 ## 10. Multi-item cart
 - The biggest lift in phase 2. There is currently no cart at all — checkout is a single "Buy Now" flow (`/api/checkout` takes one product, quantity hardcoded to `1`).
