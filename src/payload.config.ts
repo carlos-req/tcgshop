@@ -1,5 +1,6 @@
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { s3Storage } from "@payloadcms/storage-s3";
 import path from "path";
 import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
@@ -34,6 +35,11 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
+  bodyParser: {
+    limits: {
+      fileSize: 5 * 1024 * 1024, // 5MB
+    },
+  },
   collections: [Users, Customers, Media, Categories, Products, Orders],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "dev-payload-secret-change-me",
@@ -46,5 +52,22 @@ export default buildConfig({
       ssl: isLocalDatabase ? undefined : { rejectUnauthorized: false },
     },
   }),
+  plugins: [
+    s3Storage({
+      collections: {
+        media: true,
+      },
+      bucket: process.env.SUPABASE_STORAGE_BUCKET || "",
+      config: {
+        endpoint: process.env.SUPABASE_STORAGE_ENDPOINT,
+        region: process.env.SUPABASE_STORAGE_REGION || "us-east-1",
+        credentials: {
+          accessKeyId: process.env.SUPABASE_STORAGE_ACCESS_KEY_ID || "",
+          secretAccessKey: process.env.SUPABASE_STORAGE_SECRET_ACCESS_KEY || "",
+        },
+        forcePathStyle: true,
+      },
+    }),
+  ],
   sharp,
 });
