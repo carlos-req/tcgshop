@@ -50,6 +50,10 @@ export default buildConfig({
     pool: {
       connectionString,
       ssl: isLocalDatabase ? undefined : { rejectUnauthorized: false },
+      // Each serverless invocation gets its own pool; a low per-instance cap
+      // keeps concurrent invocations from collectively exhausting Supabase's
+      // pooler connection limit.
+      max: isLocalDatabase ? 10 : 3,
     },
   }),
   plugins: [
