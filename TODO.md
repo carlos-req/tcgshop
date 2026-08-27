@@ -3,7 +3,7 @@
 Status reflects what's actually in the codebase as of 2026-08-26. Completed phases/items (catalog + CMS + Stripe checkout foundation, Supabase Postgres migration, `Customers` collection + account pages, multi-item cart, order history, legal pages, SEO/accessibility pass, Media S3 storage, production `DATABASE_URL` pooler fix, 2b type cleanup) are done — see git history, `plan.md`, and `plan-v2.md` for details.
 
 ## Loose ends
-- Not yet built (beyond original scope, no current need): `pokemon` category doc (type is wired for it, but no CMS category exists yet); handling for `checkout.session.expired`/async payment failure events.
+- Not yet built (beyond original scope, no current need): handling for `checkout.session.expired`/async payment failure events in the Stripe webhook route (still only handles `checkout.session.completed`).
 
 ## Pre-launch checklist
 - **Order confirmation email**: no email adapter is configured yet (`No email adapter provided` warning on startup) — the checkout success banner already claims "you'll receive a confirmation email shortly," which isn't true today. Needs a real adapter (e.g. Resend, Postmark) in `payload.config.ts`.
