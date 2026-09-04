@@ -32,7 +32,26 @@ export async function POST(request: Request) {
     );
   }
 
+  if (event.type === "checkout.session.expired") {
+    handleCheckoutSessionExpired(event.data.object as Stripe.Checkout.Session);
+  }
+
   return NextResponse.json({ received: true });
+}
+
+// No order or stock state to reconcile here — orders are only ever created
+// on checkout.session.completed, and stock isn't reserved at session
+// creation. This is purely for abandoned-checkout visibility.
+function handleCheckoutSessionExpired(session: Stripe.Checkout.Session) {
+  console.log(`Checkout session expired: ${session.id}`);
+  Sentry.captureMessage("Checkout session expired", {
+    level: "info",
+    tags: { area: "stripe-webhook", step: "checkout-session-expired" },
+    extra: {
+      sessionId: session.id,
+      customerEmail: session.customer_details?.email ?? undefined,
+    },
+  });
 }
 
 function formatCurrency(amount: number, currency: string): string {
