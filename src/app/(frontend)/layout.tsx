@@ -80,6 +80,7 @@ export default function RootLayout({
           </AppShell>
           <CartDrawer />
         </CartProvider>
+        <Analytics />
       </body>
     </html>
   );

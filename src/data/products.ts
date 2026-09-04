@@ -1,36 +1,15 @@
+import type {
+  Media as PayloadMedia,
+  Product as PayloadProduct,
+} from "@/payload-types";
 import type { Product, ProductDetail, StockStatus } from "@/types/product";
 import { getPayloadClient } from "@/lib/payload";
 import { getCategoryBySlug } from "@/data/categories";
 
-interface PayloadMediaDoc {
-  url?: string | null;
-  alt?: string | null;
-}
-
-interface PayloadCategoryRef {
-  slug?: string;
-}
-
-interface PayloadProductDoc {
-  id: string | number;
-  name: string;
-  slug: string;
-  sku?: string | null;
-  description?: string | null;
-  price: number;
-  originalPrice?: number | null;
-  stock?: number | null;
-  status: StockStatus;
-  images?: (PayloadMediaDoc | string | number)[] | null;
-  stripePriceId?: string | null;
-  category?: PayloadCategoryRef | string | number | null;
-  updatedAt?: string;
-}
-
 async function findProductDoc(
   categorySlug: string,
   productSlug: string,
-): Promise<{ categoryId: string; doc: PayloadProductDoc } | null> {
+): Promise<{ categoryId: string; doc: PayloadProduct } | null> {
   const category = await getCategoryBySlug(categorySlug);
   if (!category) return null;
 
@@ -48,18 +27,18 @@ async function findProductDoc(
     limit: 1,
   });
 
-  const doc = result.docs[0] as PayloadProductDoc | undefined;
+  const doc = result.docs[0];
   return doc ? { categoryId: category.id, doc } : null;
 }
 
-function firstImage(doc: PayloadProductDoc) {
+function firstImage(doc: PayloadProduct) {
   const image = doc.images?.[0];
-  const url = typeof image === "object" && image?.url ? image.url : "";
-  const alt = (typeof image === "object" && image?.alt) || doc.name;
-  return { url, alt };
+  const media: PayloadMedia | undefined =
+    typeof image === "object" && image !== null ? image : undefined;
+  return { url: media?.url ?? "", alt: media?.alt ?? doc.name };
 }
 
-function mapToProduct(doc: PayloadProductDoc, categorySlug: string): Product {
+function mapToProduct(doc: PayloadProduct, categorySlug: string): Product {
   const { url, alt } = firstImage(doc);
 
   return {
@@ -73,6 +52,10 @@ function mapToProduct(doc: PayloadProductDoc, categorySlug: string): Product {
     category: categorySlug,
     slug: doc.slug,
   };
+}
+
+function categorySlugOf(doc: PayloadProduct): string | undefined {
+  return typeof doc.category === "object" ? doc.category.slug : undefined;
 }
 
 export async function getProductsByCategory(
@@ -90,9 +73,7 @@ export async function getProductsByCategory(
     limit: 100,
   });
 
-  return (result.docs as unknown as PayloadProductDoc[]).map((doc) =>
-    mapToProduct(doc, categorySlug),
-  );
+  return result.docs.map((doc) => mapToProduct(doc, categorySlug));
 }
 
 export async function getRecentProducts(limit = 8): Promise<Product[]> {
@@ -105,9 +86,8 @@ export async function getRecentProducts(limit = 8): Promise<Product[]> {
     limit,
   });
 
-  return (result.docs as unknown as PayloadProductDoc[]).flatMap((doc) => {
-    const categorySlug =
-      typeof doc.category === "object" ? doc.category?.slug : undefined;
+  return result.docs.flatMap((doc) => {
+    const categorySlug = categorySlugOf(doc);
     return categorySlug ? [mapToProduct(doc, categorySlug)] : [];
   });
 }
@@ -123,11 +103,10 @@ export async function getGlobalFeaturedProduct(): Promise<Product | null> {
     limit: 1,
   });
 
-  const doc = result.docs[0] as PayloadProductDoc | undefined;
+  const doc = result.docs[0];
   if (!doc) return null;
 
-  const categorySlug =
-    typeof doc.category === "object" ? doc.category?.slug : undefined;
+  const categorySlug = categorySlugOf(doc);
   return categorySlug ? mapToProduct(doc, categorySlug) : null;
 }
 
@@ -143,8 +122,8 @@ export async function getProductBySlug(
   return {
     ...mapToProduct(doc, categorySlug),
     description: doc.description ?? undefined,
-    sku: doc.sku ?? "",
-    stock: doc.stock ?? 0,
+    sku: doc.sku,
+    stock: doc.stock,
   };
 }
 
@@ -164,15 +143,14 @@ export async function getAllProductsForSitemap(): Promise<SitemapProduct[]> {
     limit: 1000,
   });
 
-  return (result.docs as unknown as PayloadProductDoc[]).flatMap((doc) => {
-    const categorySlug =
-      typeof doc.category === "object" ? doc.category?.slug : undefined;
+  return result.docs.flatMap((doc) => {
+    const categorySlug = categorySlugOf(doc);
     if (!categorySlug) return [];
     return [
       {
         categorySlug,
         productSlug: doc.slug,
-        updatedAt: doc.updatedAt ?? new Date().toISOString(),
+        updatedAt: doc.updatedAt,
       },
     ];
   });
@@ -204,7 +182,7 @@ export async function getProductForCheckout(
     id: String(doc.id),
     name: doc.name,
     status: doc.status,
-    stock: doc.stock ?? 0,
+    stock: doc.stock,
     stripePriceId: doc.stripePriceId ?? null,
   };
 }

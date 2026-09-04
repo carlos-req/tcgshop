@@ -1,14 +1,8 @@
+import type { Category as PayloadCategory } from "@/payload-types";
 import type { Category } from "@/types/product";
 import { getPayloadClient } from "@/lib/payload";
 
-interface PayloadCategoryDoc {
-  id: string | number;
-  name: string;
-  slug: string;
-  description?: string | null;
-}
-
-function mapToCategory(doc: PayloadCategoryDoc): Category {
+function mapToCategory(doc: PayloadCategory): Category {
   return {
     id: String(doc.id),
     name: doc.name,
@@ -28,7 +22,7 @@ export async function getCategoryBySlug(
     limit: 1,
   });
 
-  const doc = result.docs[0] as PayloadCategoryDoc | undefined;
+  const doc = result.docs[0];
   return doc ? mapToCategory(doc) : null;
 }
 
@@ -41,5 +35,5 @@ export async function getAllCategories(): Promise<Category[]> {
     limit: 100,
   });
 
-  return (result.docs as PayloadCategoryDoc[]).map(mapToCategory);
+  return result.docs.map(mapToCategory);
 }
