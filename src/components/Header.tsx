@@ -160,7 +160,7 @@ export function Header() {
         <nav
           id="mobile-nav"
           aria-label="Categories"
-          className="border-t border-white/5 bg-surface-container-lowest lg:hidden"
+          className="bg-surface-container-lowest border-t border-white/5 lg:hidden"
         >
           <ul className="max-w-container mx-auto flex flex-col gap-1 px-8 py-4">
             {navLinks.map((link) => {
