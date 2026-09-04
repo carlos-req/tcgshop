@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 import { getProductForCheckout } from "@/data/products";
 import { getPayloadClient } from "@/lib/payload";
 import { getStripeClient } from "@/lib/stripe";
@@ -117,6 +118,11 @@ export async function POST(request: Request) {
   });
 
   if (!session.url) {
+    Sentry.captureMessage("Stripe checkout session created without a URL", {
+      level: "error",
+      tags: { area: "checkout" },
+      extra: { sessionId: session.id },
+    });
     return NextResponse.json(
       { error: "Could not create checkout session" },
       { status: 502 },

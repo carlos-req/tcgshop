@@ -1,4 +1,5 @@
 import { postgresAdapter } from "@payloadcms/db-postgres";
+import { resendAdapter } from "@payloadcms/email-resend";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { s3Storage } from "@payloadcms/storage-s3";
 import path from "path";
@@ -42,6 +43,11 @@ export default buildConfig({
   },
   collections: [Users, Customers, Media, Categories, Products, Orders],
   editor: lexicalEditor(),
+  email: resendAdapter({
+    defaultFromAddress: process.env.RESEND_FROM_ADDRESS || "onboarding@resend.dev",
+    defaultFromName: "X-Spelled",
+    apiKey: process.env.RESEND_API_KEY || "",
+  }),
   secret: process.env.PAYLOAD_SECRET || "dev-payload-secret-change-me",
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
