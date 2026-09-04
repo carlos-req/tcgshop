@@ -1,15 +1,28 @@
-import { MessageCircle, Newspaper, ShieldCheck } from "lucide-react";
+import { Info, Instagram, Mail, MessageCircle, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
 const supportLinks = [
-  { label: "Pre-order Policy & Guarantees", href: "/support/pre-order-policy" },
-  { label: "Shipping & Tracking Info", href: "/support/shipping" },
-  { label: "Returns & Authenticity", href: "/legal/returns-policy" },
+  { label: "Refunds & Cancellations", href: "/legal/returns-policy" },
+  { label: "Preorder Policy", href: "/legal/preorder-policy" },
+  { label: "Shipping Policy", href: "/legal/shipping-policy" },
+  { label: "Privacy Policy", href: "/legal/privacy-policy" },
 ];
 
 const communityLinks = [
-  { label: "Discord Server", href: "https://discord.gg", icon: MessageCircle },
-  { label: "Collector's Blog", href: "/blog", icon: Newspaper },
+  { label: "About Us", href: "/about", icon: Info, external: false },
+  { label: "Contact Us", href: "/contact", icon: Mail, external: false },
+  {
+    label: "Discord Server",
+    href: "https://discord.gg/pdRh6Mubvm",
+    icon: MessageCircle,
+    external: true,
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/xspelled",
+    icon: Instagram,
+    external: true,
+  },
 ];
 
 const legalLinks = [
@@ -33,7 +46,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-on-surface">Support</h4>
+            <h4 className="text-sm font-semibold text-on-surface">More Info</h4>
             <ul className="mt-4 space-y-2">
               {supportLinks.map((link) => (
                 <li key={link.href}>
@@ -55,6 +68,9 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
+                    {...(link.external
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
                     className="inline-flex items-center gap-2 text-sm text-on-surface-variant transition-colors hover:text-on-surface"
                   >
                     <link.icon className="size-4" aria-hidden="true" />

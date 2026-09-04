@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 import type Stripe from "stripe";
 import { getPayloadClient } from "@/lib/payload";
 import { getStripeClient } from "@/lib/stripe";
@@ -31,7 +32,77 @@ export async function POST(request: Request) {
     );
   }
 
+  if (event.type === "checkout.session.expired") {
+    handleCheckoutSessionExpired(event.data.object as Stripe.Checkout.Session);
+  }
+
   return NextResponse.json({ received: true });
+}
+
+// No order or stock state to reconcile here — orders are only ever created
+// on checkout.session.completed, and stock isn't reserved at session
+// creation. This is purely for abandoned-checkout visibility.
+function handleCheckoutSessionExpired(session: Stripe.Checkout.Session) {
+  console.log(`Checkout session expired: ${session.id}`);
+  Sentry.captureMessage("Checkout session expired", {
+    level: "info",
+    tags: { area: "stripe-webhook", step: "checkout-session-expired" },
+    extra: {
+      sessionId: session.id,
+      customerEmail: session.customer_details?.email ?? undefined,
+    },
+  });
+}
+
+function formatCurrency(amount: number, currency: string): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: currency.toUpperCase(),
+  }).format(amount / 100);
+}
+
+async function sendOrderConfirmationEmail({
+  to,
+  sessionId,
+  lineItems,
+  amountTotal,
+  currency,
+}: {
+  to: string;
+  sessionId: string;
+  lineItems: { name: string; quantity: number; unitAmount: number }[];
+  amountTotal: number;
+  currency: string;
+}) {
+  const payload = await getPayloadClient();
+
+  const itemsHtml = lineItems
+    .map(
+      (item) =>
+        `<tr>
+          <td style="padding:8px 0;">${item.name} &times; ${item.quantity}</td>
+          <td style="padding:8px 0;text-align:right;">${formatCurrency(item.unitAmount * item.quantity, currency)}</td>
+        </tr>`,
+    )
+    .join("");
+
+  await payload.sendEmail({
+    to,
+    subject: "Your order is confirmed",
+    html: `
+      <div style="font-family:sans-serif;max-width:480px;margin:0 auto;">
+        <h2>Thanks for your order!</h2>
+        <p>Order reference: ${sessionId}</p>
+        <table style="width:100%;border-collapse:collapse;">
+          ${itemsHtml}
+          <tr>
+            <td style="padding:12px 0;font-weight:bold;border-top:1px solid #ddd;">Total</td>
+            <td style="padding:12px 0;font-weight:bold;text-align:right;border-top:1px solid #ddd;">${formatCurrency(amountTotal, currency)}</td>
+          </tr>
+        </table>
+      </div>
+    `,
+  });
 }
 
 async function handleCheckoutSessionCompleted(
@@ -88,6 +159,11 @@ async function handleCheckoutSessionCompleted(
     console.error(
       `No recognized line items for checkout session ${session.id} — skipping order creation`,
     );
+    Sentry.captureMessage("Paid checkout session had no recognized line items", {
+      level: "error",
+      tags: { area: "stripe-webhook", step: "line-item-match" },
+      extra: { sessionId: session.id },
+    });
     return;
   }
 
@@ -132,9 +208,49 @@ async function handleCheckoutSessionCompleted(
       `Order create failed for checkout session ${session.id} (possibly a duplicate webhook delivery):`,
       error,
     );
+    Sentry.captureException(error, {
+      tags: { area: "stripe-webhook", step: "order-create" },
+      extra: { sessionId: session.id },
+    });
   }
 
   if (!orderCreated) return;
+
+  const customerEmail = session.customer_details?.email;
+  if (customerEmail) {
+    const emailLineItems = stripeLineItems.data.flatMap((item) => {
+      const priceId = item.price?.id;
+      const product = priceId ? productByPriceId.get(priceId) : undefined;
+      if (!product) return [];
+
+      return [
+        {
+          name: product.name,
+          quantity: item.quantity ?? 1,
+          unitAmount: item.price?.unit_amount ?? 0,
+        },
+      ];
+    });
+
+    try {
+      await sendOrderConfirmationEmail({
+        to: customerEmail,
+        sessionId: session.id,
+        lineItems: emailLineItems,
+        amountTotal: session.amount_total ?? 0,
+        currency: session.currency ?? "usd",
+      });
+    } catch (error) {
+      console.error(
+        `Order confirmation email failed for checkout session ${session.id}:`,
+        error,
+      );
+      Sentry.captureException(error, {
+        tags: { area: "stripe-webhook", step: "confirmation-email" },
+        extra: { sessionId: session.id },
+      });
+    }
+  }
 
   for (const item of lineItems) {
     const decremented = await decrementProductStock(
@@ -145,6 +261,11 @@ async function handleCheckoutSessionCompleted(
       console.error(
         `Stock decrement failed for product ${item.product} (session ${session.id}) — product may be oversold, needs manual review`,
       );
+      Sentry.captureMessage("Stock decrement failed after paid order", {
+        level: "error",
+        tags: { area: "stripe-webhook", step: "stock-decrement" },
+        extra: { sessionId: session.id, productId: item.product },
+      });
     }
   }
 }

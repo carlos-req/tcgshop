@@ -1,8 +1,10 @@
 "use client";
 
 import { Menu, Search, ShoppingBag, User, X } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import xspelledLogo from "@/assets/XSpelled_Logo_clear_bg.png";
 import {
   useCallback,
   useEffect,
@@ -61,11 +63,13 @@ export function Header() {
   return (
     <header className="bg-surface-container-lowest/90 sticky top-0 z-50 border-b border-white/5 backdrop-blur-md">
       <div className="max-w-container mx-auto flex items-center gap-6 px-8 py-4">
-        <Link
-          href="/"
-          className="font-display text-on-surface shrink-0 text-lg font-semibold"
-        >
-          X-Spelled
+        <Link href="/" className="shrink-0">
+          <Image
+            src={xspelledLogo}
+            alt="X-Spelled"
+            className="h-14 w-auto"
+            priority
+          />
         </Link>
 
         <nav className="hidden items-center gap-6 lg:flex">
