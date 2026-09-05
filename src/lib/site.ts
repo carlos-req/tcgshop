@@ -7,3 +7,7 @@ export const COMPANY_NAME = "X-Spelled";
 // deployed environment once a production domain exists (tracked in TODO.md).
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+export const SUPPORT_EMAIL = "support@xspelled.com";
+export const DISCORD_URL = "https://discord.gg/pdRh6Mubvm";
+export const INSTAGRAM_URL = "https://www.instagram.com/xspelled";
