@@ -9,6 +9,7 @@ import { AuthField, AuthForm } from "../(account)/AuthForm";
 
 export const metadata: Metadata = {
   title: "Create account | X-Spelled",
+  robots: { index: false, follow: false },
 };
 
 export default function SignupPage() {

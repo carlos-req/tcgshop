@@ -15,78 +15,101 @@ export default function ReturnsPolicyPage() {
         Returns &amp; Refund Policy
       </h1>
       <p className="text-on-surface-variant mt-3 text-sm">
-        What to expect if something arrives wrong, damaged, or you change
-        your mind.
+        What to expect if you need to make changes to an order.
       </p>
 
       <div className="mt-8 flex flex-col gap-6">
-        <LegalSection title="Sealed product policy">
+        <LegalSection title="All sales are final">
           <p>
-            Trading card products lose their resale value once opened, so
-            this needs to state clearly whether opened/unsealed product can
-            be returned at all, or only unopened/factory-sealed items — this
-            is the single most important decision in this whole policy and
-            should be made deliberately, not left as a placeholder.
+            Due to the nature of our merchandise, we cannot accept returns,
+            exchanges, or refunds. Please be very careful that you purchase
+            the correct item and correct quantity of the item you would like.
+          </p>
+          <p>
+            Once we ship your package, any damages are the responsibility of
+            the shipping carrier.
+          </p>
+          <p>
+            You can always contact us with any questions at{" "}
+            <a
+              href="mailto:support@xspelled.com"
+              className="text-primary underline underline-offset-2"
+            >
+              support@xspelled.com
+            </a>
+            .
           </p>
         </LegalSection>
 
-        <LegalSection title="Return window">
+        <LegalSection title="International orders">
           <p>
-            Needs a specific number of days from delivery within which a
-            return or exchange can be requested.
-          </p>
-        </LegalSection>
-
-        <LegalSection title="Damaged, missing, or incorrect items">
-          <p>
-            Needs to cover: how to report a damaged shipment (ideally with
-            photo evidence), the timeframe to report it in, and whether{" "}
-            {COMPANY_NAME} covers replacement shipping in these cases.
-          </p>
-        </LegalSection>
-
-        <LegalSection title="Authenticity guarantee">
-          <p>
-            Needs to state what happens if a customer believes they received
-            a non-authentic or previously-opened-and-resealed product —
-            this should tie back to the &ldquo;factory-sealed and
-            verified&rdquo; promise made on product pages.
-          </p>
-        </LegalSection>
-
-        <LegalSection title="How to request a return">
-          <p>
-            Needs the actual process: contact method, whether a return
-            authorization is required before shipping anything back, and who
-            pays return shipping in each scenario.
-          </p>
-        </LegalSection>
-
-        <LegalSection title="Refunds">
-          <p>
-            Needs to cover: refund method (original payment method via
-            Stripe), processing time once a return is received, and whether
-            original shipping costs are refunded.
+            We cannot accept cancellations for orders from customers residing
+            outside of the US.
           </p>
         </LegalSection>
 
         <LegalSection title="Preorder cancellations">
           <p>
-            Needs to cover whether and until when a preorder can be
-            cancelled for a full refund before it ships — should stay
-            consistent with the Preorders section of the Terms of Service.
+            Preordering products before their release date involves certain
+            risks. By placing a preorder, you agree to a binding purchase
+            agreement for the product at the advertised price.
           </p>
-        </LegalSection>
 
-        <LegalSection title="Non-returnable items">
+          <div>
+            <p className="text-on-surface font-medium">
+              Cancellation requests
+            </p>
+            <ul className="mt-2 list-disc space-y-2 pl-5">
+              <li>
+                <span className="text-on-surface font-medium">
+                  Deadline —
+                </span>{" "}
+                cancellation requests must be made prior to the deadline
+                stated on the product page. If no cancellation deadline is
+                listed, the preorder is non-cancellable.
+              </li>
+              <li>
+                <span className="text-on-surface font-medium">Fees —</span>{" "}
+                approved cancellations will incur a fee of 10% of the total
+                value of the items canceled. Partial cancellations are also
+                subject to this fee. Cancellation requests must be submitted
+                via email, and the fee must be accepted in writing before the
+                cancellation is finalized.
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <p className="text-on-surface font-medium">
+              After the cancellation deadline
+            </p>
+            <p className="mt-2">
+              Preorder cancellations are not accepted. Customers assume and
+              accept all risks when purchasing unreleased products, including
+              but not limited to delays, quality issues, price fluctuations,
+              changes in interest, or financial hardship. Exceptions may be
+              made on a case-by-case basis, but approved cancellations after
+              the deadline will be subject to a 35% cancellation fee.
+            </p>
+          </div>
+
           <p>
-            Needs an explicit list, once one exists (e.g. opened packs,
-            clearance/final-sale items if those are ever introduced).
+            If we must cancel your preorder (without your request), you will
+            receive a full refund with no cancellation fees.
           </p>
         </LegalSection>
 
         <LegalSection title="Contact">
-          <p>[insert contact details]</p>
+          <p>
+            Questions about this policy can be sent to{" "}
+            <a
+              href="mailto:support@xspelled.com"
+              className="text-primary underline underline-offset-2"
+            >
+              support@xspelled.com
+            </a>
+            .
+          </p>
         </LegalSection>
       </div>
     </div>

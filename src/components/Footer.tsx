@@ -1,6 +1,8 @@
 import { Info, Instagram, Mail, MessageCircle, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
+import { DISCORD_URL, INSTAGRAM_URL } from "@/lib/site";
+
 const supportLinks = [
   { label: "Refunds & Cancellations", href: "/legal/returns-policy" },
   { label: "Preorder Policy", href: "/legal/preorder-policy" },
@@ -13,13 +15,13 @@ const communityLinks = [
   { label: "Contact Us", href: "/contact", icon: Mail, external: false },
   {
     label: "Discord Server",
-    href: "https://discord.gg/pdRh6Mubvm",
+    href: DISCORD_URL,
     icon: MessageCircle,
     external: true,
   },
   {
     label: "Instagram",
-    href: "https://www.instagram.com/xspelled",
+    href: INSTAGRAM_URL,
     icon: Instagram,
     external: true,
   },

@@ -12,6 +12,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, changeFrequency: "daily", priority: 1 },
     {
+      url: `${SITE_URL}/about`,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url: `${SITE_URL}/contact`,
+      changeFrequency: "monthly",
+      priority: 0.4,
+    },
+    {
       url: `${SITE_URL}/legal/privacy-policy`,
       changeFrequency: "yearly",
       priority: 0.2,
@@ -23,6 +33,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${SITE_URL}/legal/returns-policy`,
+      changeFrequency: "yearly",
+      priority: 0.2,
+    },
+    {
+      url: `${SITE_URL}/legal/shipping-policy`,
+      changeFrequency: "yearly",
+      priority: 0.2,
+    },
+    {
+      url: `${SITE_URL}/legal/preorder-policy`,
       changeFrequency: "yearly",
       priority: 0.2,
     },

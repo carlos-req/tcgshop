@@ -8,6 +8,8 @@ function mapToCategory(doc: PayloadCategory): Category {
     name: doc.name,
     slug: doc.slug,
     description: doc.description ?? undefined,
+    metaTitle: doc.metaTitle ?? undefined,
+    metaDescription: doc.metaDescription ?? undefined,
   };
 }
 

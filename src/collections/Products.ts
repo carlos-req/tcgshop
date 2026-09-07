@@ -99,5 +99,24 @@ export const Products: CollectionConfig = {
       type: "text",
       index: true,
     },
+    {
+      name: "metaTitle",
+      type: "text",
+      admin: {
+        position: "sidebar",
+        description:
+          "Overrides the auto-generated <title>. Leave blank to use the default.",
+      },
+    },
+    {
+      name: "metaDescription",
+      type: "textarea",
+      maxLength: 160,
+      admin: {
+        position: "sidebar",
+        description:
+          "Overrides the auto-generated meta description (~155 characters).",
+      },
+    },
   ],
 };

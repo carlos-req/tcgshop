@@ -19,53 +19,73 @@ export default function ShippingPolicyPage() {
       </p>
 
       <div className="mt-8 flex flex-col gap-6">
-        <LegalSection title="Where we ship">
+        <LegalSection title="Where we ship to">
           <p>
-            Needs to state which countries/regions are currently served —
-            checkout is currently limited to US shipping addresses, so this
-            should stay in sync with that.
+            We ship everywhere within the United States, United States
+            Territories, and military bases. We also offer international
+            shipping to select countries — read on to learn more.
           </p>
         </LegalSection>
 
-        <LegalSection title="Shipping rates and speed">
+        <LegalSection title="International shipping">
           <p>
-            Needs to cover the shipping options offered at checkout, their
-            cost, and estimated transit time once a package ships.
+            International customers from select countries may purchase from
+            us directly through our website. Our website will automatically
+            charge you for duties and taxes that will be remitted to your
+            country for easy customs clearance.
+          </p>
+          <p>
+            Customers using a freight forwarding service, or any third party
+            fulfillment service, for purchases from our website do so at
+            their own risk. We are not responsible for any problems that
+            happen after your order leaves our warehouse, including problems
+            you may have using your freight forwarder.
+          </p>
+          <p>
+            International customers are expected to abide by their
+            country&rsquo;s import laws. Any packages returned to us due to
+            customs clearance problems are the sole responsibility of the
+            customer.
           </p>
         </LegalSection>
 
-        <LegalSection title="Processing time">
+        <LegalSection title="Shipping time">
           <p>
-            Needs to state how long after an order is placed it actually
-            ships (order processing time, separate from transit time).
+            As a small team, we work to fulfill your order as quickly as
+            possible. We typically process and ship your order within 1-2
+            business days.
           </p>
         </LegalSection>
 
-        <LegalSection title="Packaging">
+        <LegalSection title="Buy online, pickup in-store">
           <p>
-            Needs to describe how sealed product is packaged/protected in
-            transit, since this is part of the &ldquo;factory-sealed and
-            verified&rdquo; promise made on product pages.
+            If you live locally and if shipping costs and time are a
+            concern, we suggest purchasing items online and picking up
+            in-store. This will guarantee the items you&rsquo;d like before
+            they potentially sell out.
           </p>
         </LegalSection>
 
-        <LegalSection title="Tracking">
+        <LegalSection title="How do I check the status of my order?">
           <p>
-            Needs to state when and how tracking information is sent to the
-            customer once a package ships.
-          </p>
-        </LegalSection>
-
-        <LegalSection title="Lost or damaged in transit">
-          <p>
-            Needs to cover how to report a package that never arrives or
-            arrives damaged, and how that&apos;s resolved — should stay
-            consistent with the Refunds &amp; Cancellations policy.
+            When your order has shipped, you will receive an email
+            notification from us which will include a tracking number you
+            can use to check its status. Please allow 48 hours for the
+            tracking information to become available.
           </p>
         </LegalSection>
 
         <LegalSection title="Contact">
-          <p>[insert contact details]</p>
+          <p>
+            Questions about this policy can be sent to{" "}
+            <a
+              href="mailto:support@xspelled.com"
+              className="text-primary underline underline-offset-2"
+            >
+              support@xspelled.com
+            </a>
+            .
+          </p>
         </LegalSection>
       </div>
     </div>

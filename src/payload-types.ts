@@ -236,6 +236,8 @@ export interface Category {
   name: string;
   slug: string;
   description?: string | null;
+  metaTitle?: string | null;
+  metaDescription?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -258,6 +260,8 @@ export interface Product {
   images?: (number | Media)[] | null;
   stripeProductId?: string | null;
   stripePriceId?: string | null;
+  metaTitle?: string | null;
+  metaDescription?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -483,6 +487,8 @@ export interface CategoriesSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
   description?: T;
+  metaTitle?: T;
+  metaDescription?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -504,6 +510,8 @@ export interface ProductsSelect<T extends boolean = true> {
   images?: T;
   stripeProductId?: T;
   stripePriceId?: T;
+  metaTitle?: T;
+  metaDescription?: T;
   updatedAt?: T;
   createdAt?: T;
 }
