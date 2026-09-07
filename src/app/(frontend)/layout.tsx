@@ -7,7 +7,9 @@ import { Footer } from "@/components/Footer";
 import { CartDrawer } from "@/components/CartDrawer";
 import { AppShell } from "@/components/AppShell";
 import { CartProvider } from "@/lib/cart-context";
-import { SITE_URL } from "@/lib/site";
+import { JsonLd } from "@/components/JsonLd";
+import { DISCORD_URL, INSTAGRAM_URL, SITE_URL } from "@/lib/site";
+import { buildOrganizationJsonLd } from "@/lib/seo";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -36,6 +38,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: "X-Spelled | Sealed. Authenticated. Yours to open.",
   description,
+  alternates: {
+    canonical: SITE_URL,
+  },
   openGraph: {
     title: "X-Spelled | Sealed. Authenticated. Yours to open.",
     description,
@@ -64,6 +69,9 @@ export default function RootLayout({
       className={`${fraunces.variable} ${sourceSans.variable} ${plexMono.variable}`}
     >
       <body className="flex min-h-screen flex-col">
+        <JsonLd
+          data={buildOrganizationJsonLd([DISCORD_URL, INSTAGRAM_URL])}
+        />
         <CartProvider>
           <AppShell>
             <a

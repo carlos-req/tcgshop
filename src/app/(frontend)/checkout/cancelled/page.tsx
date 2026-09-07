@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Checkout cancelled | X-Spelled",
+  robots: { index: false, follow: false },
 };
 
 export default function CheckoutCancelledPage() {

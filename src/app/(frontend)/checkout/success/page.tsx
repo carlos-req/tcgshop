@@ -6,6 +6,7 @@ import { ClearCartOnMount } from "@/components/ClearCartOnMount";
 
 export const metadata: Metadata = {
   title: "Order confirmed | X-Spelled",
+  robots: { index: false, follow: false },
 };
 
 export default function CheckoutSuccessPage() {

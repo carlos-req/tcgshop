@@ -124,6 +124,8 @@ export async function getProductBySlug(
     description: doc.description ?? undefined,
     sku: doc.sku,
     stock: doc.stock,
+    metaTitle: doc.metaTitle ?? undefined,
+    metaDescription: doc.metaDescription ?? undefined,
   };
 }
 

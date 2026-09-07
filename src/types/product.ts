@@ -5,6 +5,8 @@ export interface Category {
   name: string;
   slug: string;
   description?: string;
+  metaTitle?: string;
+  metaDescription?: string;
 }
 
 export interface Product {
@@ -23,4 +25,6 @@ export interface ProductDetail extends Product {
   description?: string;
   sku: string;
   stock: number;
+  metaTitle?: string;
+  metaDescription?: string;
 }
