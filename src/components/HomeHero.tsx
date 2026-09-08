@@ -36,7 +36,7 @@ export function HomeHero({ featuredProduct }: HomeHeroProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent" />
       </div>
 
-      <div className="relative mx-auto flex max-w-container flex-col items-center gap-12 px-8 py-20 lg:flex-row lg:py-28">
+      <div className="relative mx-auto flex max-w-container flex-col items-center gap-12 px-4 py-20 sm:px-8 lg:flex-row lg:py-28">
         <div className="max-w-xl text-center lg:text-left">
           <p className="text-eyebrow text-primary">
             Sealed, authenticated, yours to open

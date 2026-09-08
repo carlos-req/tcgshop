@@ -70,8 +70,8 @@ export function ProductCardSection({ products }: ProductCardSectionProps) {
 
   return (
     <section className="bg-surface py-10 lg:py-14">
-      <div className="mx-auto max-w-container px-8">
-        <div className="sticky top-16 z-10 -mx-8 flex flex-wrap items-center gap-3 border-b border-outline-variant bg-surface/95 px-8 py-4 backdrop-blur-sm">
+      <div className="mx-auto max-w-container px-4 sm:px-8">
+        <div className="sticky top-[89px] z-10 -mx-4 flex flex-wrap items-center gap-3 border-b border-outline-variant bg-surface/95 px-4 py-4 backdrop-blur-sm sm:-mx-8 sm:px-8">
           <FilterSelect
             label="Sort: Sales"
             value={sortBy}

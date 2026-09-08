@@ -63,12 +63,12 @@ export function OrderList({ orders }: { orders: Order[] }) {
                     {href ? (
                       <Link
                         href={href}
-                        className="hover:text-primary-dim line-clamp-1"
+                        className="hover:text-primary-dim line-clamp-1 min-w-0 flex-1"
                       >
                         {name}
                       </Link>
                     ) : (
-                      <span className="line-clamp-1">{name}</span>
+                      <span className="line-clamp-1 min-w-0 flex-1">{name}</span>
                     )}
                     <span className="shrink-0">×{lineItem.quantity}</span>
                   </li>

@@ -10,7 +10,7 @@ export function NewArrivals({ products }: NewArrivalsProps) {
 
   return (
     <section className="bg-surface-container-lowest py-16">
-      <div className="mx-auto max-w-container px-8">
+      <div className="mx-auto max-w-container px-4 sm:px-8">
         <p className="text-eyebrow text-primary">Just landed</p>
         <h2 className="mt-1 text-headline-md text-on-surface">
           New arrivals

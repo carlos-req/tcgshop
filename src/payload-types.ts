@@ -236,7 +236,13 @@ export interface Category {
   name: string;
   slug: string;
   description?: string | null;
+  /**
+   * Overrides the auto-generated <title>. Leave blank to use the default.
+   */
   metaTitle?: string | null;
+  /**
+   * Overrides the auto-generated meta description (~155 characters).
+   */
   metaDescription?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -260,7 +266,13 @@ export interface Product {
   images?: (number | Media)[] | null;
   stripeProductId?: string | null;
   stripePriceId?: string | null;
+  /**
+   * Overrides the auto-generated <title>. Leave blank to use the default.
+   */
   metaTitle?: string | null;
+  /**
+   * Overrides the auto-generated meta description (~155 characters).
+   */
   metaDescription?: string | null;
   updatedAt: string;
   createdAt: string;

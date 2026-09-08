@@ -35,7 +35,7 @@ const otherWaysToReachUs = [
 export default function ContactPage() {
   return (
     <div className="bg-surface">
-      <div className="mx-auto max-w-3xl px-8 py-16">
+      <div className="mx-auto max-w-3xl px-4 py-16 sm:px-8">
         <p className="text-label-mono text-primary">Support</p>
         <h1 className="font-display text-on-surface mt-2 text-3xl font-semibold italic">
           Contact Us

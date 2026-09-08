@@ -25,6 +25,7 @@ export function Header() {
   const { itemCount, openCart } = useCart();
   const [searchQuery, setSearchQuery] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
   // Close the mobile menu on navigation — it's the only way below the `lg`
   // breakpoint to reach category pages, so it needs to behave like real
@@ -35,6 +36,7 @@ export function Header() {
   if (pathname !== lastPathname) {
     setLastPathname(pathname);
     setIsMenuOpen(false);
+    setIsMobileSearchOpen(false);
   }
 
   useEffect(() => {
@@ -62,7 +64,7 @@ export function Header() {
 
   return (
     <header className="bg-surface-container-lowest/90 sticky top-0 z-50 border-b border-white/5 backdrop-blur-md">
-      <div className="max-w-container mx-auto flex items-center gap-6 px-8 py-4">
+      <div className="max-w-container mx-auto flex items-center gap-6 px-4 py-4 sm:px-8">
         <Link href="/" className="shrink-0">
           <Image
             src={xspelledLogo}
@@ -118,6 +120,16 @@ export function Header() {
         <div className="ml-auto flex items-center gap-4">
           <button
             type="button"
+            onClick={() => setIsMobileSearchOpen((current) => !current)}
+            aria-expanded={isMobileSearchOpen}
+            aria-controls="mobile-search"
+            aria-label={isMobileSearchOpen ? "Close search" : "Search"}
+            className="text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface cursor-pointer rounded-full p-2 transition-colors md:hidden"
+          >
+            <Search className="size-5" />
+          </button>
+          <button
+            type="button"
             onClick={openCart}
             className="text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface relative cursor-pointer rounded-full p-2 transition-colors"
             aria-label={`Cart${itemCount > 0 ? `, ${itemCount} item${itemCount === 1 ? "" : "s"}` : ""}`}
@@ -156,13 +168,45 @@ export function Header() {
         </div>
       </div>
 
+      {isMobileSearchOpen && (
+        <div
+          id="mobile-search"
+          className="border-t border-white/5 px-4 py-3 md:hidden"
+        >
+          <form
+            role="search"
+            onSubmit={handleSearchSubmit}
+            className="relative"
+          >
+            <label htmlFor="mobile-site-search" className="sr-only">
+              Search for cards or sets
+            </label>
+            <Search
+              className="text-outline absolute top-1/2 left-4 size-4 -translate-y-1/2"
+              aria-hidden="true"
+            />
+            <input
+              id="mobile-site-search"
+              type="search"
+              name="q"
+              autoComplete="off"
+              placeholder="Search for cards or sets…"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              autoFocus
+              className="border-outline-variant/60 text-on-surface placeholder:text-outline/70 focus-visible:border-primary-dim focus-visible:ring-primary-dim/30 w-full rounded-full border bg-transparent py-2.5 pr-4 pl-11 font-mono text-sm focus-visible:ring-1 focus-visible:outline-none"
+            />
+          </form>
+        </div>
+      )}
+
       {isMenuOpen && (
         <nav
           id="mobile-nav"
           aria-label="Categories"
           className="bg-surface-container-lowest border-t border-white/5 lg:hidden"
         >
-          <ul className="max-w-container mx-auto flex flex-col gap-1 px-8 py-4">
+          <ul className="max-w-container mx-auto flex flex-col gap-1 px-4 py-4 sm:px-8">
             {navLinks.map((link) => {
               const active = pathname?.startsWith(link.href);
               return (

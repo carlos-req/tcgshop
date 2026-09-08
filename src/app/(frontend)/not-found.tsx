@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function NotFound() {
   return (
     <div className="bg-surface">
-      <div className="mx-auto flex max-w-container flex-col items-center px-8 py-24 text-center">
+      <div className="mx-auto flex max-w-container flex-col items-center px-4 py-24 text-center sm:px-8">
         <p className="text-label-mono text-primary-dim">404</p>
         <h1 className="mt-2 text-display-lg text-on-surface">
           We couldn&apos;t find that page

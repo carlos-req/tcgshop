@@ -13,7 +13,7 @@ export default function CheckoutSuccessPage() {
   return (
     <div className="bg-surface-container-lowest">
       <ClearCartOnMount />
-      <div className="max-w-container mx-auto flex flex-col items-center px-8 py-24 text-center">
+      <div className="max-w-container mx-auto flex flex-col items-center px-4 py-24 text-center sm:px-8">
         <ShieldCheck className="text-primary size-12" aria-hidden="true" />
         <h1 className="font-display text-on-surface mt-6 text-3xl font-semibold italic">
           Payment successful

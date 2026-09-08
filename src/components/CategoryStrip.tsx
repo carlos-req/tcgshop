@@ -11,7 +11,7 @@ export function CategoryStrip({
 }: CategoryStripProps) {
   return (
     <section className="bg-surface-container-lowest">
-      <div className="mx-auto flex max-w-container flex-wrap items-baseline justify-between gap-x-6 gap-y-2 px-8 py-8">
+      <div className="mx-auto flex max-w-container flex-wrap items-baseline justify-between gap-x-6 gap-y-2 px-4 py-8 sm:px-8">
         <div>
           <h1 className="text-headline-md text-on-surface">{name}</h1>
           {description && (
