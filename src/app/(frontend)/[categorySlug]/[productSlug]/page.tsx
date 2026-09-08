@@ -88,7 +88,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     <div className="bg-surface">
       <JsonLd data={buildProductJsonLd(product, category)} />
       <JsonLd data={buildBreadcrumbJsonLd(breadcrumbItems)} />
-      <div className="mx-auto max-w-container px-8 py-12">
+      <div className="mx-auto max-w-container px-4 py-12 sm:px-8">
         <nav aria-label="Breadcrumb" className="text-sm text-on-surface-variant">
           <ol className="flex flex-wrap items-center gap-2">
             <li>

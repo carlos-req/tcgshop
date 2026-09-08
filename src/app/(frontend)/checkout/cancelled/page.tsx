@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function CheckoutCancelledPage() {
   return (
     <div className="bg-surface-container-lowest">
-      <div className="max-w-container mx-auto flex flex-col items-center px-8 py-24 text-center">
+      <div className="max-w-container mx-auto flex flex-col items-center px-4 py-24 text-center sm:px-8">
         <h1 className="font-display text-on-surface text-3xl font-semibold italic">
           Checkout cancelled
         </h1>

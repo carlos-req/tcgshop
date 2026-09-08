@@ -5,6 +5,7 @@ import "../globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CartDrawer } from "@/components/CartDrawer";
+import { CookieNotice } from "@/components/CookieNotice";
 import { AppShell } from "@/components/AppShell";
 import { CartProvider } from "@/lib/cart-context";
 import { JsonLd } from "@/components/JsonLd";
@@ -88,6 +89,7 @@ export default function RootLayout({
           </AppShell>
           <CartDrawer />
         </CartProvider>
+        <CookieNotice />
         <Analytics />
       </body>
     </html>

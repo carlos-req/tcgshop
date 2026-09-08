@@ -181,7 +181,7 @@ export function CartDrawer() {
                           }
                           disabled={item.quantity <= 1}
                           aria-label={`Decrease quantity of ${item.name}`}
-                          className="text-on-surface-variant hover:text-on-surface cursor-pointer p-1.5 disabled:cursor-not-allowed disabled:opacity-40"
+                          className="text-on-surface-variant hover:text-on-surface flex size-11 cursor-pointer items-center justify-center disabled:cursor-not-allowed disabled:opacity-40"
                         >
                           <Minus className="size-3.5" />
                         </button>
@@ -194,7 +194,7 @@ export function CartDrawer() {
                             setQuantity(item.productId, item.quantity + 1)
                           }
                           aria-label={`Increase quantity of ${item.name}`}
-                          className="text-on-surface-variant hover:text-on-surface cursor-pointer p-1.5"
+                          className="text-on-surface-variant hover:text-on-surface flex size-11 cursor-pointer items-center justify-center"
                         >
                           <Plus className="size-3.5" />
                         </button>

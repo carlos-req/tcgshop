@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default function AccountPage() {
   return (
     <div className="bg-surface-container-lowest">
-      <div className="max-w-container mx-auto px-8 py-16">
+      <div className="max-w-container mx-auto px-4 py-16 sm:px-8">
         <Suspense fallback={<AccountFallback />}>
           <AccountContent />
         </Suspense>

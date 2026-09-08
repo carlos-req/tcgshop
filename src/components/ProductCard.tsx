@@ -54,7 +54,7 @@ function ProductCardComponent({ product }: ProductCardProps) {
           label={button.label}
           disabled={button.disabled}
           showIcon={false}
-          className={`w-full rounded-full py-1.5 text-xs font-semibold transition-colors ${button.className}`}
+          className={`flex min-h-11 w-full items-center justify-center rounded-full text-xs font-semibold transition-colors ${button.className}`}
         />
       </div>
     </article>

@@ -10,7 +10,7 @@ export function ShopByGame({ categories }: ShopByGameProps) {
 
   return (
     <section className="bg-surface py-14">
-      <div className="mx-auto max-w-container px-8">
+      <div className="mx-auto max-w-container px-4 sm:px-8">
         <p className="text-eyebrow text-primary">Shop by game</p>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
